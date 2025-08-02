@@ -7,19 +7,7 @@
   --teal: #addbd4;
   --yellow: #fed87d;
 }
-h1 {
-  font-family: 'Helvetica';
-  font-size: clamp(1rem, 7vw, 3rem);
-  margin-top: 40px;
-  margin-bottom: 0px;
-}
-.title-border{
-  height: 2px;
-  background-color: #333;
-  width: 100%;
-  margin-top: 0px;
-  margin-bottom: 50px;
-}
+/* --------------------Page header-------------------- */
 .contact-me-btn {
   background: none;
   border: none;
@@ -63,15 +51,46 @@ h1 {
   height: 4px;
   background-color: var(--black);
   width: 100%;
-}flex-staro
+}
+/* --------------------Intro Title-------------------- */
+
+h1 {
+  font-family: 'Helvetica';
+  font-size: clamp(1rem, 7vw, 3rem);
+  margin-top: 40px;
+  margin-bottom: 0px;
+}
+.title-border{
+  height: 2px;
+  background-color: #333;
+  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 50px;
+}
+
+/* --------------------Intro-------------------- */
 .intro-text {
   flex: 1;
 }
+.intro-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .intro-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
 .profile{
   flex-shrink: 0;
 }
 .profile-picture {
-  width: clamp(300px, 40vw, 500px);
+  width: clamp(300px, 40vw, 450px);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); 
 }
 
@@ -94,16 +113,6 @@ h1 {
 }
 */
 
-.logo{
-  box-shadow: none;
-  height: clamp(60px, 15vw, 125px);
-  float: right;
-}
-@media (max-width: 600px) {
-  .logo {
-    display: none;
-  }
-}
 p {
   font-size: 18px;
   line-height: 1.4;
@@ -111,11 +120,6 @@ p {
   text-align: none;
 }
 
-@media (min-width: 600px) and (max-width: 1300px) {
-  p {
-    max-width: clamp(135px, 35vw, 700px);
-  }
-}
 
 body {
   background-color: var(--sand);
@@ -155,19 +159,24 @@ body {
   background-color: var(--light-orange);
 }
 
+/* --------------------About Me-------------------- */
+@media (min-width: 950px) {
+  .about-me {
+    margin-top: -200px;
+  }
+}
+
 h2 {
   font-family: 'Helvetica';
   font-size: clamp(1rem, 7vw, 3rem);
-  position: absolute;
-  bottom: -32px;
-  left: 50px;
-  margin: 0;
+  margin-bottom: 0px;
+}
+.about-me-border{
+  height: 2px;
+  background-color: #333;
+  width: 50%;
+  margin-top: 0px;
+  margin-bottom: 50px;
 }
 
-@media (max-width: 600px) {
-  h2 {
-    position: static;
-    margin-top: 50px;
-  }
-}
 
