@@ -10,13 +10,15 @@
 h1 {
   font-family: 'Helvetica';
   font-size: clamp(1rem, 7vw, 3rem);
-  border-bottom: 2px solid #333;
   margin-top: 40px;
+  margin-bottom: 0px;
 }
-h1 img {
-  width: auto;
-  vertical-align: middle;
-  margin-right: 100px;
+.title-border{
+  height: 2px;
+  background-color: #333;
+  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 50px;
 }
 .contact-me-btn {
   background: none;
@@ -28,7 +30,7 @@ h1 img {
 .name {
   font-size: 16px;
 }
-.nav-bar {
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,7 +44,7 @@ h1 img {
     display: none;
   }
   
-  .nav-bar {
+  .page-header {
     justify-content: center;
   }
 }
@@ -61,15 +63,23 @@ h1 img {
   height: 4px;
   background-color: var(--black);
   width: 100%;
+}flex-staro
+.intro-text {
+  flex: 1;
 }
-.profile_picture {
+.profile{
+  flex-shrink: 0;
+}
+.profile-picture {
   width: clamp(300px, 40vw, 500px);
-  position: absolute;
-  right: 50px;
-  top: clamp(150px, 20vh, 250px);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); 
 }
 
+.subtitle {
+  font-size: 22px;
+  font-weight: bold;
+}
+/*)
 @media (max-width: 600px) {
   .profile_picture {
     width: 100vw;
@@ -82,6 +92,7 @@ h1 img {
     display: block;
   }
 }
+*/
 
 .logo{
   box-shadow: none;
