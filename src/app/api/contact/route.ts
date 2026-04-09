@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { sendNewMessageNotification } from '@/lib/resend'
+import { sendPushNotification } from '@/lib/webpush'
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
@@ -28,8 +29,24 @@ export async function POST(request: NextRequest) {
   try {
     await sendNewMessageNotification({ name, email: email || '', phone: phone || '', message })
   } catch (err) {
-    // Non-fatal — message is saved, notification just failed
     console.error('Resend notification error:', err)
+  }
+
+  try {
+    const { data: subs } = await supabase.from('push_subscriptions').select('endpoint, p256dh, auth')
+    if (subs && subs.length > 0) {
+      await Promise.allSettled(
+        subs.map((sub) =>
+          sendPushNotification(sub, {
+            title: `New message from ${name}`,
+            body: message.slice(0, 100),
+            url: '/admin/messages',
+          })
+        )
+      )
+    }
+  } catch (err) {
+    console.error('Push notification error:', err)
   }
 
   return NextResponse.json({ success: true })

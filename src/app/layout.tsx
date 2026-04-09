@@ -14,6 +14,15 @@ export const metadata: Metadata = {
     'overnight pet care Palm Beach',
     'Brooke Trusty Paws',
   ],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: "Trusty Paws",
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 }
 
 export default function RootLayout({
