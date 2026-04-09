@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { createServiceClient } from '@/lib/supabase/server'
 import { sendNewMessageNotification } from '@/lib/resend'
 import { sendPushNotification } from '@/lib/webpush'
@@ -11,7 +12,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Name and message are required' }, { status: 400 })
   }
 
-  const supabase = await createServiceClient()
+  // Use anon client for public insert — RLS policy allows anon inserts on messages
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   const { error } = await supabase.from('messages').insert({
     name,
@@ -33,7 +38,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { data: subs } = await supabase.from('push_subscriptions').select('endpoint, p256dh, auth')
+    const serviceSupabase = await createServiceClient()
+    const { data: subs } = await serviceSupabase.from('push_subscriptions').select('endpoint, p256dh, auth')
     if (subs && subs.length > 0) {
       await Promise.allSettled(
         subs.map((sub) =>
