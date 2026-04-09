@@ -22,19 +22,19 @@ export default async function AdminDashboard() {
     <div className="max-w-4xl">
 
       {/* Header banner */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-8 flex items-center gap-6">
+      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-8 flex items-center gap-3 sm:gap-6">
         <Image
           src="/images/Transparent_Logo.png"
           alt="Brooke's Trusty Paws Co."
           width={100}
           height={100}
-          className="object-contain shrink-0"
+          className="object-contain shrink-0 w-14 h-14 sm:w-24 sm:h-24"
         />
-        <div className="flex-1">
-          <h1 className="font-display text-3xl text-driftwood mb-0.5">Dashboard</h1>
-          <p className="text-gray-400">Welcome back punk</p>
+        <div className="flex-1 min-w-0">
+          <h1 className="font-display text-2xl sm:text-3xl text-driftwood mb-0.5 truncate">Dashboard</h1>
+          <p className="text-gray-400 text-sm sm:text-base">Welcome back punk</p>
         </div>
-        <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-sand shadow-md shrink-0">
+        <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-sand shadow-md shrink-0">
           <Image
             src="/images/Brooke_Profile_Trimmed.png"
             alt="Brooke"
