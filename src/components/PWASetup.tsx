@@ -19,15 +19,17 @@ export default function PWASetup() {
       const permission = await Notification.requestPermission()
       if (permission !== 'granted') return
 
-      const existing = await registration.pushManager.getSubscription()
-      if (existing) return // already subscribed
-
       try {
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-        })
+        // Get existing subscription or create a new one
+        let subscription = await registration.pushManager.getSubscription()
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+          })
+        }
 
+        // Always upsert to DB — subscription may exist in browser but not yet saved
         const { endpoint, keys } = subscription.toJSON() as {
           endpoint: string
           keys: { p256dh: string; auth: string }
