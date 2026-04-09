@@ -8,49 +8,66 @@
   --yellow: #fed87d;
 }
 /* --------------------Page header-------------------- */
-.contact-me-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.name {
-  font-size: 16px;
-}
 .page-header {
   display: flex;
-  justify-content: space-between;
+  background: none;
+  width: 100%;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
   margin-top: 20px;
   position: relative;
 }
 
-@media (max-width: 600px) {
-  .contact-me-btn, .name {
-    display: none;
-  }
-  
   .page-header {
     justify-content: center;
   }
+.logo {
+  width: 75px;
+  height: auto;
 }
 
-.nav-bar-btn {
+.name {
+  font-size: 16px;
+  position: absolute;
+  left: 0;
+}
+@media (max-width: 1200px) {
+  .name {
+    display: none;
+  }
+  .logo {
+    display: none;
+  }
+}
+.navigation-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation-buttons button {
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  width: 70px;
-  height: 20px;
+  font-size: 16px;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
-.nav-bar-btn span {
-  height: 4px;
-  background-color: var(--black);
-  width: 100%;
+@media (max-width: 768px) {
+  .navigation-buttons button {
+    gap: 5px;
+    font-size: 16px;
+    padding: 3px 6px;
+  }
+}
+
+.navigation-buttons button:hover {
+  background-color: var(--teal);
 }
 /* --------------------Intro Title-------------------- */
 
@@ -91,7 +108,6 @@ h1 {
 }
 .profile-picture {
   width: clamp(300px, 40vw, 450px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); 
 }
 
 .subtitle {
@@ -122,7 +138,7 @@ p {
 
 
 body {
-  background-color: var(--sand);
+  background: linear-gradient(to top left, white, #f5ebdf, #e7d6be, #dabea0);
   margin-left: 50px;
   margin-right: 50px;
   font-family: 'Helvetica', Arial, sans-serif;
@@ -179,4 +195,121 @@ h2 {
   margin-bottom: 50px;
 }
 
+.about-me-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
 
+@media (max-width: 768px) {
+  .about-me-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .about-me-border {
+    width: 95%;
+  }
+  .services-btn {
+    align-items: center;
+  }
+}
+
+.about-me-text {
+  flex: 1;
+}
+.about-me-subtitle {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.about-me-image {
+  flex-shrink: 0;
+}
+
+.about-me-picture {
+  width: clamp(250px, 35vw, 400px);
+  height: auto;
+}
+
+.services-btn {
+  background-color: var(--orange);
+  padding: 15px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.services-btn:hover {
+  background-color: var(--light-orange);
+}
+
+/* --------------------Services-------------------- */
+h3 {
+  font-family: 'Helvetica';
+  font-size: clamp(1rem, 7vw, 3rem);
+  margin-bottom: 0px;
+}
+.services-me-border{
+  height: 2px;
+  background-color: #333;
+  width: 50%;
+  margin-top: 0px;
+  margin-bottom: 50px;
+}
+
+.services-content {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .services-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .services-me-border {
+    width: 95%;
+  }
+}
+
+.petsitting-box,
+.overnight-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+
+.dog-pic,
+.house-pic {
+  width: 55%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.services-subtitle {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.petsitting-btn,
+.overnight-btn {
+  background-color: var(--orange);
+  padding: 15px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.petsitting-btn:hover,
+.overnight-btn:hover {
+  background-color: var(--light-orange);
+}

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  --sand: #dabea0;
+  --ocean: #76bcb7;
+  --seafoam: #addbd4;
+  --coral: #fe8769;
+  --light-coral: #fda371;
+  --sunshine: #fed87d;
+  --white-sand: #f5ebdf;
+  --deep-ocean: #4a9b95;
+  --driftwood: #8b6f4e;
+  --black: #333333;
+}
+
+@theme inline {
+  --color-sand: var(--sand);
+  --color-ocean: var(--ocean);
+  --color-seafoam: var(--seafoam);
+  --color-coral: var(--coral);
+  --color-light-coral: var(--light-coral);
+  --color-sunshine: var(--sunshine);
+  --color-white-sand: var(--white-sand);
+  --color-deep-ocean: var(--deep-ocean);
+  --color-driftwood: var(--driftwood);
+  --font-display: 'Pacifico', cursive;
+  --font-sans: 'Nunito', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--black);
+  background-color: var(--white-sand);
+}
