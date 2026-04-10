@@ -46,7 +46,7 @@ export default async function ServiceArea() {
                 <h3 className="font-bold text-driftwood text-lg">{area.city}</h3>
               </div>
               <div className="flex flex-wrap gap-2">
-                {area.zip_codes.map((zip) => (
+                {area.zip_codes.map((zip: string) => (
                   <span
                     key={zip}
                     className="text-xs px-2.5 py-1 bg-seafoam/30 text-deep-ocean rounded-full font-medium"

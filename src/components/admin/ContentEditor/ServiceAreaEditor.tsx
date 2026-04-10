@@ -2,68 +2,60 @@
 
 import { useRef, useState } from 'react'
 import { type ServiceArea } from '@/app/admin/content/ContentTabs'
+import { saveServiceArea, addServiceArea, removeServiceArea, reorderServiceAreas } from '@/app/admin/content/actions'
 
-type Toast = { type: 'success' | 'error'; message: string }
+type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 export default function ServiceAreaEditor({ initialServiceArea }: { initialServiceArea: ServiceArea[] }) {
   const [areas, setAreas] = useState<ServiceArea[]>(initialServiceArea)
-  const [saving, setSaving] = useState<string | null>(null)
+  const [saveStates, setSaveStates] = useState<Record<string, SaveState>>({})
   const [adding, setAdding] = useState(false)
+  const [addError, setAddError] = useState<string | null>(null)
   const [newZip, setNewZip] = useState<Record<string, string>>({})
-  const [toast, setToast] = useState<Toast | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const dragItem = useRef<number | null>(null)
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  function showToast(t: Toast) {
-    if (toastTimer.current) clearTimeout(toastTimer.current)
-    setToast(t)
-    toastTimer.current = setTimeout(() => setToast(null), 3000)
-  }
-
-  async function api(method: string, body: object) {
-    const res = await fetch('/api/admin/service-area', {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-    const json = await res.json()
-    if (!res.ok) throw new Error(json.error ?? 'Unknown error')
-    return json
+  function setSaveState(id: string, state: SaveState) {
+    setSaveStates((prev) => ({ ...prev, [id]: state }))
+    if (state === 'saved' || state === 'error') {
+      setTimeout(() => setSaveStates((prev) => ({ ...prev, [id]: 'idle' })), 3000)
+    }
   }
 
   async function handleSave(area: ServiceArea) {
-    setSaving(area.id)
+    setSaveState(area.id, 'saving')
     try {
-      await api('PUT', { id: area.id, city: area.city, zip_codes: area.zip_codes })
-      showToast({ type: 'success', message: `"${area.city}" saved.` })
+      await saveServiceArea(area.id, area.city, area.zip_codes)
+      setSaveState(area.id, 'saved')
     } catch (e) {
-      showToast({ type: 'error', message: (e as Error).message })
+      console.error('Service area save failed:', e)
+      setSaveState(area.id, 'error')
     }
-    setSaving(null)
   }
 
   async function handleAddArea() {
     setAdding(true)
+    setAddError(null)
     const maxOrder = areas.length > 0 ? Math.max(...areas.map((a) => a.sort_order)) : 0
     try {
-      const data = await api('POST', { city: 'New City', zip_codes: [], sort_order: maxOrder + 1 })
+      const data = await addServiceArea(maxOrder + 1)
       setAreas((prev) => [...prev, data])
-      showToast({ type: 'success', message: 'Service area added.' })
     } catch (e) {
-      showToast({ type: 'error', message: (e as Error).message })
+      console.error('Service area add failed:', e)
+      setAddError((e as Error).message)
     }
     setAdding(false)
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this service area?')) return
+    setSaveState(id, 'saving')
     try {
-      await api('DELETE', { id })
+      await removeServiceArea(id)
       setAreas((prev) => prev.filter((a) => a.id !== id))
-      showToast({ type: 'success', message: 'Service area deleted.' })
     } catch (e) {
-      showToast({ type: 'error', message: (e as Error).message })
+      console.error('Service area delete failed:', e)
+      setSaveState(id, 'error')
     }
   }
 
@@ -99,26 +91,29 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
     setAreas(updated)
 
     try {
-      await api('PATCH', { updates: updated.map(({ id, sort_order }) => ({ id, sort_order })) })
+      await reorderServiceAreas(updated.map(({ id, sort_order }) => ({ id, sort_order })))
     } catch (e) {
-      showToast({ type: 'error', message: 'Reorder failed: ' + (e as Error).message })
+      console.error('Service area reorder failed:', e)
     }
+  }
+
+  function saveLabel(id: string) {
+    const s = saveStates[id] ?? 'idle'
+    if (s === 'saving') return 'Saving...'
+    if (s === 'saved') return '✓ Saved'
+    if (s === 'error') return '✕ Failed'
+    return 'Save Changes'
+  }
+
+  function saveBtnClass(id: string) {
+    const s = saveStates[id] ?? 'idle'
+    if (s === 'saved') return 'px-5 py-2 bg-green-500 text-white rounded-full text-sm font-bold transition-colors'
+    if (s === 'error') return 'px-5 py-2 bg-coral text-white rounded-full text-sm font-bold transition-colors'
+    return 'px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60'
   }
 
   return (
     <div className="space-y-5">
-      {toast && (
-        <div
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium ${
-            toast.type === 'success'
-              ? 'bg-seafoam/30 text-deep-ocean'
-              : 'bg-coral/10 text-coral'
-          }`}
-        >
-          {toast.type === 'success' ? '✓ ' : '✕ '}{toast.message}
-        </div>
-      )}
-
       {areas.map((area, index) => (
         <div
           key={area.id}
@@ -187,10 +182,10 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
           <div className="flex gap-3">
             <button
               onClick={() => handleSave(area)}
-              disabled={saving === area.id}
-              className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
+              disabled={saveStates[area.id] === 'saving'}
+              className={saveBtnClass(area.id)}
             >
-              {saving === area.id ? 'Saving...' : 'Save Changes'}
+              {saveLabel(area.id)}
             </button>
             <button
               onClick={() => handleDelete(area.id)}
@@ -202,6 +197,9 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
         </div>
       ))}
 
+      {addError && (
+        <p className="text-sm text-coral bg-coral/10 px-4 py-2 rounded-xl">✕ {addError}</p>
+      )}
       <button
         onClick={handleAddArea}
         disabled={adding}
