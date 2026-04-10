@@ -21,7 +21,7 @@ export default function AvailabilityCalendar() {
           <AvailabilityCalendarClient />
         </div>
 
-        <p className="text-center text-white/70 text-xs mt-4">
+        <p className="text-center text-white/70 text-sm mt-4">
           Showing free/busy only. Contact Brooke to book a specific date.
         </p>
       </div>
