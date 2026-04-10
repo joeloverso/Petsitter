@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
 
 interface ImageSlot {
   key: 'profile' | 'pet_1' | 'pet_2' | 'family_1' | 'family_2'
@@ -50,46 +49,29 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
   const [uploading, setUploading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({})
-  const supabase = createClient()
 
   async function handleUpload(key: string, file: File) {
     setUploading(key)
     setError(null)
 
-    const ext = file.name.split('.').pop()
-    const path = `${key}.${ext}`
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('key', key)
 
-    // Upload to Supabase Storage (upsert so re-uploads replace the old file)
-    const { error: uploadError } = await supabase.storage
-      .from('site-images')
-      .upload(path, file, { upsert: true })
+    const res = await fetch('/api/admin/upload-image', {
+      method: 'POST',
+      body: formData,
+    })
 
-    if (uploadError) {
-      setError(`Upload failed: ${uploadError.message}`)
+    const json = await res.json()
+
+    if (!res.ok) {
+      setError(`Upload failed: ${json.error ?? 'Unknown error'}`)
       setUploading(null)
       return
     }
 
-    // Get the public URL
-    const { data: urlData } = supabase.storage
-      .from('site-images')
-      .getPublicUrl(path)
-
-    const publicUrl = urlData.publicUrl
-
-    // Save URL to site_images table
-    const { error: dbError } = await supabase
-      .from('site_images')
-      .update({ url: publicUrl, updated_at: new Date().toISOString() })
-      .eq('key', key)
-
-    if (dbError) {
-      setError(`Failed to save image URL: ${dbError.message}`)
-      setUploading(null)
-      return
-    }
-
-    setImages((prev) => ({ ...prev, [key]: publicUrl }))
+    setImages((prev) => ({ ...prev, [key]: json.url }))
     setUploading(null)
   }
 
