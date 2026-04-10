@@ -1,3 +1,6 @@
+self.addEventListener('install', () => self.skipWaiting())
+self.addEventListener('activate', (event) => event.waitUntil(clients.claim()))
+
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {}
   const title = data.title || "Trusty Paws — New Message"
@@ -5,6 +8,8 @@ self.addEventListener('push', (event) => {
     body: data.body || 'You have a new message.',
     icon: '/images/Transparent_Logo_Icons.png',
     badge: '/images/Transparent_Logo_Icons.png',
+    vibrate: [200, 100, 200],
+    tag: Date.now().toString(),
     data: { url: data.url || '/admin/messages' },
   }
 
