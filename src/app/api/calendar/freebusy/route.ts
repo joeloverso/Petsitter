@@ -3,11 +3,13 @@ import { NextResponse } from 'next/server'
 const CALENDAR_ID = 'brookemaisano.petsitting@gmail.com'
 const TZ = 'America/New_York'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const apiKey = process.env.GOOGLE_CALENDAR_API_KEY
 
   if (!apiKey) {
-    return NextResponse.json({ busy: [], configured: false })
+    return NextResponse.json({ busy: [], configured: false, debug: 'GOOGLE_CALENDAR_API_KEY not set' })
   }
 
   const now = new Date()
@@ -26,22 +28,32 @@ export async function GET() {
           timeZone: TZ,
           items: [{ id: CALENDAR_ID }],
         }),
-        next: { revalidate: 300 }, // cache for 5 minutes
       }
     )
 
+    const body = await res.json()
+
     if (!res.ok) {
-      console.error('[freebusy] Google API error:', res.status, await res.text())
-      return NextResponse.json({ busy: [], configured: true, error: true })
+      console.error('[freebusy] Google API error:', res.status, body)
+      return NextResponse.json({
+        busy: [],
+        configured: true,
+        error: true,
+        debug: body?.error?.message ?? `HTTP ${res.status}`,
+      })
     }
 
-    const data = await res.json()
     const busy: { start: string; end: string }[] =
-      data.calendars?.[CALENDAR_ID]?.busy ?? []
+      body.calendars?.[CALENDAR_ID]?.busy ?? []
 
     return NextResponse.json({ busy, configured: true })
   } catch (err) {
     console.error('[freebusy] fetch failed:', err)
-    return NextResponse.json({ busy: [], configured: true, error: true })
+    return NextResponse.json({
+      busy: [],
+      configured: true,
+      error: true,
+      debug: String(err),
+    })
   }
 }

@@ -93,11 +93,13 @@ function MonthGrid({
 export default function AvailabilityCalendarClient() {
   const [busyDates, setBusyDates] = useState<Set<string>>(new Set())
   const [status, setStatus] = useState<'loading' | 'ok' | 'unconfigured' | 'error'>('loading')
+  const [debugMsg, setDebugMsg] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/calendar/freebusy')
       .then((r) => r.json())
       .then((data) => {
+        if (data.debug) setDebugMsg(data.debug)
         if (!data.configured) {
           setStatus('unconfigured')
           return
@@ -109,7 +111,10 @@ export default function AvailabilityCalendarClient() {
         setBusyDates(getBusyDateSet(data.busy ?? []))
         setStatus('ok')
       })
-      .catch(() => setStatus('error'))
+      .catch((e) => {
+        setDebugMsg(String(e))
+        setStatus('error')
+      })
   }, [])
 
   const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' })
@@ -130,16 +135,18 @@ export default function AvailabilityCalendarClient() {
 
   if (status === 'unconfigured') {
     return (
-      <div className="text-white/50 text-center py-12 text-sm">
-        Calendar not yet configured — contact Brooke to check availability.
+      <div className="text-center py-12 text-sm space-y-1">
+        <p className="text-white/50">Calendar not yet configured — contact Brooke to check availability.</p>
+        {debugMsg && <p className="text-white/30 text-xs font-mono">{debugMsg}</p>}
       </div>
     )
   }
 
   if (status === 'error') {
     return (
-      <div className="text-white/50 text-center py-12 text-sm">
-        Unable to load calendar. Please reach out directly to check availability.
+      <div className="text-center py-12 text-sm space-y-1">
+        <p className="text-white/50">Unable to load calendar. Please reach out directly to check availability.</p>
+        {debugMsg && <p className="text-white/30 text-xs font-mono">{debugMsg}</p>}
       </div>
     )
   }
