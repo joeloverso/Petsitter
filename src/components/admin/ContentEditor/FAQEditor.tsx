@@ -1,47 +1,73 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { type FAQ } from '@/app/admin/content/ContentTabs'
+
+type Toast = { type: 'success' | 'error'; message: string }
 
 export default function FAQEditor({ initialFaqs }: { initialFaqs: FAQ[] }) {
   const [faqs, setFaqs] = useState<FAQ[]>(initialFaqs)
   const [saving, setSaving] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [toast, setToast] = useState<Toast | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const dragItem = useRef<number | null>(null)
-  const supabase = createClient()
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function showToast(t: Toast) {
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    setToast(t)
+    toastTimer.current = setTimeout(() => setToast(null), 3000)
+  }
+
+  async function api(method: string, body: object) {
+    const res = await fetch('/api/admin/faqs', {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    const json = await res.json()
+    if (!res.ok) throw new Error(json.error ?? 'Unknown error')
+    return json
+  }
 
   async function handleSave(faq: FAQ) {
     setSaving(faq.id)
-    setError(null)
-    const { error } = await supabase
-      .from('faqs')
-      .update({ question: faq.question, answer: faq.answer, active: faq.active })
-      .eq('id', faq.id)
-    if (error) setError('Failed to save: ' + error.message)
+    try {
+      await api('PUT', { id: faq.id, question: faq.question, answer: faq.answer, active: faq.active })
+      showToast({ type: 'success', message: 'FAQ saved.' })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
     setSaving(null)
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this FAQ?')) return
-    const { error } = await supabase.from('faqs').delete().eq('id', id)
-    if (error) setError('Failed to delete: ' + error.message)
-    else setFaqs((prev) => prev.filter((f) => f.id !== id))
+    try {
+      await api('DELETE', { id })
+      setFaqs((prev) => prev.filter((f) => f.id !== id))
+      showToast({ type: 'success', message: 'FAQ deleted.' })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
   }
 
   async function handleAdd() {
     setAdding(true)
-    setError(null)
     const maxOrder = faqs.length > 0 ? Math.max(...faqs.map((f) => f.sort_order)) : 0
-    const { data, error } = await supabase
-      .from('faqs')
-      .insert({ question: 'New Question', answer: 'New Answer', active: true, sort_order: maxOrder + 1 })
-      .select()
-      .single()
-    if (error) setError('Failed to add FAQ: ' + error.message)
-    else setFaqs((prev) => [...prev, data])
+    try {
+      const data = await api('POST', {
+        question: 'New Question',
+        answer: 'New Answer',
+        active: true,
+        sort_order: maxOrder + 1,
+      })
+      setFaqs((prev) => [...prev, data])
+      showToast({ type: 'success', message: 'FAQ added.' })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
     setAdding(false)
   }
 
@@ -53,33 +79,37 @@ export default function FAQEditor({ initialFaqs }: { initialFaqs: FAQ[] }) {
 
   async function handleDrop(toIndex: number) {
     const fromIndex = dragItem.current
-    if (fromIndex === null || fromIndex === toIndex) {
-      dragItem.current = null
-      setDragOverIndex(null)
-      return
-    }
+    dragItem.current = null
+    setDragOverIndex(null)
+    if (fromIndex === null || fromIndex === toIndex) return
 
     const reordered = [...faqs]
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(toIndex, 0, moved)
-
     const updated = reordered.map((f, i) => ({ ...f, sort_order: i + 1 }))
     setFaqs(updated)
-    dragItem.current = null
-    setDragOverIndex(null)
 
-    await Promise.all(
-      updated.map((f) =>
-        supabase.from('faqs').update({ sort_order: f.sort_order }).eq('id', f.id)
-      )
-    )
+    try {
+      await api('PATCH', { updates: updated.map(({ id, sort_order }) => ({ id, sort_order })) })
+    } catch (e) {
+      showToast({ type: 'error', message: 'Reorder failed: ' + (e as Error).message })
+    }
   }
 
   return (
     <div className="space-y-4">
-      {error && (
-        <p className="text-coral text-sm bg-coral/10 px-4 py-2 rounded-xl">{error}</p>
+      {toast && (
+        <div
+          className={`px-4 py-2.5 rounded-xl text-sm font-medium ${
+            toast.type === 'success'
+              ? 'bg-seafoam/30 text-deep-ocean'
+              : 'bg-coral/10 text-coral'
+          }`}
+        >
+          {toast.type === 'success' ? '✓ ' : '✕ '}{toast.message}
+        </div>
       )}
+
       {faqs.map((faq, index) => (
         <div
           key={faq.id}
@@ -143,6 +173,7 @@ export default function FAQEditor({ initialFaqs }: { initialFaqs: FAQ[] }) {
           </div>
         </div>
       ))}
+
       <button
         onClick={handleAdd}
         disabled={adding}

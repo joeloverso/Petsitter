@@ -1,49 +1,70 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { type ServiceArea } from '@/app/admin/content/ContentTabs'
+
+type Toast = { type: 'success' | 'error'; message: string }
 
 export default function ServiceAreaEditor({ initialServiceArea }: { initialServiceArea: ServiceArea[] }) {
   const [areas, setAreas] = useState<ServiceArea[]>(initialServiceArea)
   const [saving, setSaving] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
   const [newZip, setNewZip] = useState<Record<string, string>>({})
-  const [error, setError] = useState<string | null>(null)
+  const [toast, setToast] = useState<Toast | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   const dragItem = useRef<number | null>(null)
-  const supabase = createClient()
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function showToast(t: Toast) {
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    setToast(t)
+    toastTimer.current = setTimeout(() => setToast(null), 3000)
+  }
+
+  async function api(method: string, body: object) {
+    const res = await fetch('/api/admin/service-area', {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    const json = await res.json()
+    if (!res.ok) throw new Error(json.error ?? 'Unknown error')
+    return json
+  }
 
   async function handleSave(area: ServiceArea) {
     setSaving(area.id)
-    setError(null)
-    const { error } = await supabase
-      .from('service_area')
-      .update({ city: area.city, zip_codes: area.zip_codes })
-      .eq('id', area.id)
-    if (error) setError('Failed to save: ' + error.message)
+    try {
+      await api('PUT', { id: area.id, city: area.city, zip_codes: area.zip_codes })
+      showToast({ type: 'success', message: `"${area.city}" saved.` })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
     setSaving(null)
   }
 
   async function handleAddArea() {
     setAdding(true)
-    setError(null)
     const maxOrder = areas.length > 0 ? Math.max(...areas.map((a) => a.sort_order)) : 0
-    const { data, error } = await supabase
-      .from('service_area')
-      .insert({ city: 'New City', zip_codes: [], sort_order: maxOrder + 1 })
-      .select()
-      .single()
-    if (error) setError('Failed to add area: ' + error.message)
-    else setAreas((prev) => [...prev, data])
+    try {
+      const data = await api('POST', { city: 'New City', zip_codes: [], sort_order: maxOrder + 1 })
+      setAreas((prev) => [...prev, data])
+      showToast({ type: 'success', message: 'Service area added.' })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
     setAdding(false)
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this service area?')) return
-    const { error } = await supabase.from('service_area').delete().eq('id', id)
-    if (error) setError('Failed to delete: ' + error.message)
-    else setAreas((prev) => prev.filter((a) => a.id !== id))
+    try {
+      await api('DELETE', { id })
+      setAreas((prev) => prev.filter((a) => a.id !== id))
+      showToast({ type: 'success', message: 'Service area deleted.' })
+    } catch (e) {
+      showToast({ type: 'error', message: (e as Error).message })
+    }
   }
 
   function addZip(areaId: string) {
@@ -67,33 +88,37 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
 
   async function handleDrop(toIndex: number) {
     const fromIndex = dragItem.current
-    if (fromIndex === null || fromIndex === toIndex) {
-      dragItem.current = null
-      setDragOverIndex(null)
-      return
-    }
+    dragItem.current = null
+    setDragOverIndex(null)
+    if (fromIndex === null || fromIndex === toIndex) return
 
     const reordered = [...areas]
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(toIndex, 0, moved)
-
     const updated = reordered.map((a, i) => ({ ...a, sort_order: i + 1 }))
     setAreas(updated)
-    dragItem.current = null
-    setDragOverIndex(null)
 
-    await Promise.all(
-      updated.map((a) =>
-        supabase.from('service_area').update({ sort_order: a.sort_order }).eq('id', a.id)
-      )
-    )
+    try {
+      await api('PATCH', { updates: updated.map(({ id, sort_order }) => ({ id, sort_order })) })
+    } catch (e) {
+      showToast({ type: 'error', message: 'Reorder failed: ' + (e as Error).message })
+    }
   }
 
   return (
     <div className="space-y-5">
-      {error && (
-        <p className="text-coral text-sm bg-coral/10 px-4 py-2 rounded-xl">{error}</p>
+      {toast && (
+        <div
+          className={`px-4 py-2.5 rounded-xl text-sm font-medium ${
+            toast.type === 'success'
+              ? 'bg-seafoam/30 text-deep-ocean'
+              : 'bg-coral/10 text-coral'
+          }`}
+        >
+          {toast.type === 'success' ? '✓ ' : '✕ '}{toast.message}
+        </div>
       )}
+
       {areas.map((area, index) => (
         <div
           key={area.id}
@@ -176,6 +201,7 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
           </div>
         </div>
       ))}
+
       <button
         onClick={handleAddArea}
         disabled={adding}
