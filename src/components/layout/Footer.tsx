@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/10 text-center text-white/40 text-xs">
-          © {new Date().getFullYear()} Brooke&apos;s Trusty Paws Co. All rights reserved.
+          © {new Date().getFullYear()}{' '}Brooke&apos;s Trusty Paws Co. All rights reserved.
         </div>
       </div>
     </footer>
