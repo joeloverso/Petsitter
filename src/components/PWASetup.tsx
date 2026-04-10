@@ -15,21 +15,29 @@ export default function PWASetup() {
   useEffect(() => {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return
 
+    // Only subscribe from the installed PWA (standalone mode)
+    // Subscriptions created in the browser are tied to Chrome, not the app
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      ('standalone' in navigator && (navigator as { standalone?: boolean }).standalone === true)
+
+    if (!isStandalone) return
+
     navigator.serviceWorker.register('/sw.js').then(async (registration) => {
       const permission = await Notification.requestPermission()
       if (permission !== 'granted') return
 
       try {
-        // Get existing subscription or create a new one
-        let subscription = await registration.pushManager.getSubscription()
-        if (!subscription) {
-          subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-          })
-        }
+        // Unsubscribe any existing subscription so we get a fresh one
+        // tied to the standalone app context, not Chrome browser
+        const existing = await registration.pushManager.getSubscription()
+        if (existing) await existing.unsubscribe()
 
-        // Always upsert to DB — subscription may exist in browser but not yet saved
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        })
+
         const { endpoint, keys } = subscription.toJSON() as {
           endpoint: string
           keys: { p256dh: string; auth: string }
