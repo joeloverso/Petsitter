@@ -53,6 +53,61 @@ export async function reorderFaqs(updates: { id: string; sort_order: number }[])
   if (failed?.error) throw new Error(failed.error.message)
 }
 
+// ─── Services ────────────────────────────────────────────────────────────────
+
+export async function saveService(
+  id: string,
+  fields: {
+    name: string
+    description: string
+    base_price_low: number
+    base_price_high: number
+    pricing_notes: string
+    active: boolean
+  },
+) {
+  await requireAuth()
+  const db = await createServiceClient()
+  const { error } = await db.from('services').update(fields).eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
+export async function addService(sort_order: number) {
+  await requireAuth()
+  const db = await createServiceClient()
+  const { data, error } = await db
+    .from('services')
+    .insert({
+      name: 'New Service',
+      description: '',
+      base_price_low: 0,
+      base_price_high: 0,
+      pricing_notes: '',
+      active: false,
+      sort_order,
+    })
+    .select()
+    .single()
+  if (error) throw new Error(error.message)
+  return data as {
+    id: string
+    name: string
+    description: string
+    base_price_low: number
+    base_price_high: number
+    pricing_notes: string
+    active: boolean
+    sort_order: number
+  }
+}
+
+export async function removeService(id: string) {
+  await requireAuth()
+  const db = await createServiceClient()
+  const { error } = await db.from('services').delete().eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
 // ─── Service Area ─────────────────────────────────────────────────────────────
 
 export async function saveServiceArea(id: string, city: string, zip_codes: string[]) {

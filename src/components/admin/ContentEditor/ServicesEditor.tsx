@@ -1,20 +1,28 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { type Service } from '@/app/admin/content/ContentTabs'
+import { saveService, addService, removeService } from '@/app/admin/content/actions'
+
+type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 export default function ServicesEditor({ initialServices }: { initialServices: Service[] }) {
   const [services, setServices] = useState<Service[]>(initialServices)
-  const [saving, setSaving] = useState<string | null>(null)
+  const [saveStates, setSaveStates] = useState<Record<string, SaveState>>({})
   const [adding, setAdding] = useState(false)
-  const supabase = createClient()
+  const [addError, setAddError] = useState<string | null>(null)
+
+  function setSaveState(id: string, state: SaveState) {
+    setSaveStates((prev) => ({ ...prev, [id]: state }))
+    if (state === 'saved' || state === 'error') {
+      setTimeout(() => setSaveStates((prev) => ({ ...prev, [id]: 'idle' })), 3000)
+    }
+  }
 
   async function handleSave(service: Service) {
-    setSaving(service.id)
-    await supabase
-      .from('services')
-      .update({
+    setSaveState(service.id, 'saving')
+    try {
+      await saveService(service.id, {
         name: service.name,
         description: service.description,
         base_price_low: service.base_price_low,
@@ -22,44 +30,57 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
         pricing_notes: service.pricing_notes,
         active: service.active,
       })
-      .eq('id', service.id)
-    setSaving(null)
+      setSaveState(service.id, 'saved')
+    } catch (e) {
+      console.error('Service save failed:', e)
+      setSaveState(service.id, 'error')
+    }
   }
 
   async function handleAdd() {
     setAdding(true)
-    const newService = {
-      name: 'New Service',
-      description: '',
-      base_price_low: 0,
-      base_price_high: 0,
-      pricing_notes: '',
-      active: false,
-      sort_order: services.length + 1,
-    }
-
-    const { data, error } = await supabase
-      .from('services')
-      .insert(newService)
-      .select()
-      .single()
-
-    if (!error && data) {
+    setAddError(null)
+    try {
+      const data = await addService(services.length + 1)
       setServices((prev) => [...prev, data])
+    } catch (e) {
+      console.error('Service add failed:', e)
+      setAddError((e as Error).message)
     }
     setAdding(false)
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this service? This cannot be undone.')) return
-    await supabase.from('services').delete().eq('id', id)
-    setServices((prev) => prev.filter((s) => s.id !== id))
+    setSaveState(id, 'saving')
+    try {
+      await removeService(id)
+      setServices((prev) => prev.filter((s) => s.id !== id))
+    } catch (e) {
+      console.error('Service delete failed:', e)
+      setSaveState(id, 'error')
+    }
   }
 
   function updateField(id: string, field: keyof Service, value: string | number | boolean) {
     setServices((prev) =>
       prev.map((s) => (s.id === id ? { ...s, [field]: value } : s))
     )
+  }
+
+  function saveLabel(id: string) {
+    const s = saveStates[id] ?? 'idle'
+    if (s === 'saving') return 'Saving...'
+    if (s === 'saved') return '✓ Saved'
+    if (s === 'error') return '✕ Failed'
+    return 'Save Changes'
+  }
+
+  function saveBtnClass(id: string) {
+    const s = saveStates[id] ?? 'idle'
+    if (s === 'saved') return 'px-5 py-2 bg-green-500 text-white rounded-full text-sm font-bold transition-colors'
+    if (s === 'error') return 'px-5 py-2 bg-coral text-white rounded-full text-sm font-bold transition-colors'
+    return 'px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60'
   }
 
   return (
@@ -126,10 +147,10 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
           <div className="flex gap-3">
             <button
               onClick={() => handleSave(service)}
-              disabled={saving === service.id}
-              className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
+              disabled={saveStates[service.id] === 'saving'}
+              className={saveBtnClass(service.id)}
             >
-              {saving === service.id ? 'Saving...' : 'Save Changes'}
+              {saveLabel(service.id)}
             </button>
             <button
               onClick={() => handleDelete(service.id)}
@@ -141,6 +162,9 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
         </div>
       ))}
 
+      {addError && (
+        <p className="text-sm text-coral bg-coral/10 px-4 py-2 rounded-xl">✕ {addError}</p>
+      )}
       <button
         onClick={handleAdd}
         disabled={adding}
