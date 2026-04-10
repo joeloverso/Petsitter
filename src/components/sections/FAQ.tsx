@@ -1,7 +1,8 @@
+import { createClient } from '@/lib/supabase/server'
 import FAQItem from '@/components/ui/FAQItem'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const faqs = [
+const fallbackFaqs = [
   {
     question: 'How do I book?',
     answer:
@@ -49,7 +50,16 @@ const faqs = [
   },
 ]
 
-export default function FAQ() {
+export default async function FAQ() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('faqs')
+    .select('question, answer')
+    .eq('active', true)
+    .order('sort_order')
+
+  const faqs = data && data.length > 0 ? data : fallbackFaqs
+
   return (
     <section id="faqs" className="bg-white-sand py-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
