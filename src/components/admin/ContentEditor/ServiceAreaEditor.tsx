@@ -1,22 +1,49 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { type ServiceArea } from '@/app/admin/content/ContentTabs'
 
 export default function ServiceAreaEditor({ initialServiceArea }: { initialServiceArea: ServiceArea[] }) {
   const [areas, setAreas] = useState<ServiceArea[]>(initialServiceArea)
   const [saving, setSaving] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
   const [newZip, setNewZip] = useState<Record<string, string>>({})
+  const [error, setError] = useState<string | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const dragItem = useRef<number | null>(null)
   const supabase = createClient()
 
   async function handleSave(area: ServiceArea) {
     setSaving(area.id)
-    await supabase
+    setError(null)
+    const { error } = await supabase
       .from('service_area')
       .update({ city: area.city, zip_codes: area.zip_codes })
       .eq('id', area.id)
+    if (error) setError('Failed to save: ' + error.message)
     setSaving(null)
+  }
+
+  async function handleAddArea() {
+    setAdding(true)
+    setError(null)
+    const maxOrder = areas.length > 0 ? Math.max(...areas.map((a) => a.sort_order)) : 0
+    const { data, error } = await supabase
+      .from('service_area')
+      .insert({ city: 'New City', zip_codes: [], sort_order: maxOrder + 1 })
+      .select()
+      .single()
+    if (error) setError('Failed to add area: ' + error.message)
+    else setAreas((prev) => [...prev, data])
+    setAdding(false)
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm('Delete this service area?')) return
+    const { error } = await supabase.from('service_area').delete().eq('id', id)
+    if (error) setError('Failed to delete: ' + error.message)
+    else setAreas((prev) => prev.filter((a) => a.id !== id))
   }
 
   function addZip(areaId: string) {
@@ -38,11 +65,54 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
     )
   }
 
+  async function handleDrop(toIndex: number) {
+    const fromIndex = dragItem.current
+    if (fromIndex === null || fromIndex === toIndex) {
+      dragItem.current = null
+      setDragOverIndex(null)
+      return
+    }
+
+    const reordered = [...areas]
+    const [moved] = reordered.splice(fromIndex, 1)
+    reordered.splice(toIndex, 0, moved)
+
+    const updated = reordered.map((a, i) => ({ ...a, sort_order: i + 1 }))
+    setAreas(updated)
+    dragItem.current = null
+    setDragOverIndex(null)
+
+    await Promise.all(
+      updated.map((a) =>
+        supabase.from('service_area').update({ sort_order: a.sort_order }).eq('id', a.id)
+      )
+    )
+  }
+
   return (
     <div className="space-y-5">
-      {areas.map((area) => (
-        <div key={area.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      {error && (
+        <p className="text-coral text-sm bg-coral/10 px-4 py-2 rounded-xl">{error}</p>
+      )}
+      {areas.map((area, index) => (
+        <div
+          key={area.id}
+          draggable
+          onDragStart={() => { dragItem.current = index }}
+          onDragEnter={() => setDragOverIndex(index)}
+          onDragEnd={() => handleDrop(dragOverIndex ?? index)}
+          onDragOver={(e) => e.preventDefault()}
+          className={`bg-white rounded-2xl border shadow-sm p-6 transition-all ${
+            dragOverIndex === index ? 'border-ocean scale-[1.01]' : 'border-gray-100'
+          }`}
+        >
           <div className="flex items-center gap-3 mb-4">
+            <div
+              className="text-gray-300 text-xl cursor-grab active:cursor-grabbing select-none leading-none"
+              title="Drag to reorder"
+            >
+              ⠿
+            </div>
             <span className="text-lg">📍</span>
             <input
               className="text-lg font-bold text-driftwood bg-transparent border-b border-transparent hover:border-sand focus:border-ocean outline-none transition-colors flex-1"
@@ -85,19 +155,34 @@ export default function ServiceAreaEditor({ initialServiceArea }: { initialServi
               onClick={() => addZip(area.id)}
               className="px-4 py-2 bg-seafoam/40 text-deep-ocean rounded-xl text-sm font-semibold hover:bg-seafoam/60 transition-colors"
             >
-              Add
+              Add Zip
             </button>
           </div>
 
-          <button
-            onClick={() => handleSave(area)}
-            disabled={saving === area.id}
-            className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
-          >
-            {saving === area.id ? 'Saving...' : 'Save Changes'}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => handleSave(area)}
+              disabled={saving === area.id}
+              className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
+            >
+              {saving === area.id ? 'Saving...' : 'Save Changes'}
+            </button>
+            <button
+              onClick={() => handleDelete(area.id)}
+              className="px-5 py-2 text-gray-400 hover:text-coral text-sm font-semibold rounded-full hover:bg-coral/10 transition-colors"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
+      <button
+        onClick={handleAddArea}
+        disabled={adding}
+        className="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-sm font-semibold text-gray-400 hover:border-ocean hover:text-ocean transition-colors disabled:opacity-60"
+      >
+        {adding ? 'Adding...' : '+ Add Service Area'}
+      </button>
     </div>
   )
 }

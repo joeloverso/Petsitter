@@ -74,10 +74,10 @@ export default function ContentTabs({
         ))}
       </div>
 
-      {activeTab === 'Services' && <ServicesEditor initialServices={initialServices} />}
-      {activeTab === 'Service Area' && <ServiceAreaEditor initialServiceArea={initialServiceArea} />}
-      {activeTab === 'FAQs' && <FAQEditor initialFaqs={initialFaqs} />}
-      {activeTab === 'Photos' && <ImagesEditor initialImages={initialImages} />}
+      <div className={activeTab === 'Services' ? '' : 'hidden'}><ServicesEditor initialServices={initialServices} /></div>
+      <div className={activeTab === 'Service Area' ? '' : 'hidden'}><ServiceAreaEditor initialServiceArea={initialServiceArea} /></div>
+      <div className={activeTab === 'FAQs' ? '' : 'hidden'}><FAQEditor initialFaqs={initialFaqs} /></div>
+      <div className={activeTab === 'Photos' ? '' : 'hidden'}><ImagesEditor initialImages={initialImages} /></div>
     </div>
   )
 }
