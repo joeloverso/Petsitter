@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
           className="object-contain shrink-0 w-14 h-14 sm:w-24 sm:h-24"
         />
         <div className="flex-1 min-w-0">
-          <h1 className="font-display text-2xl sm:text-3xl text-driftwood mb-0.5 truncate">Dashboard</h1>
+          <h1 className="font-display text-2xl sm:text-3xl text-driftwood mb-0.5 truncate"><span className="sm:hidden">Dash</span><span className="hidden sm:inline">Dashboard</span></h1>
           <p className="text-gray-400 text-sm sm:text-base">Welcome back punk</p>
         </div>
         <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-sand shadow-md shrink-0">
