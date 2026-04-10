@@ -3,7 +3,7 @@ import AvailabilityCalendarClient from './AvailabilityCalendarClient'
 
 export default function AvailabilityCalendar() {
   return (
-    <section id="calendar" className="bg-ocean/80 py-20">
+    <section id="calendar" className="bg-deep-ocean py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <p className="text-white/70 font-semibold tracking-widest text-sm uppercase mb-2">

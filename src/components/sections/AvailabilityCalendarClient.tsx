@@ -73,10 +73,10 @@ function MonthGrid({
               title={isBusy ? 'Booked' : isPast ? '' : 'Available'}
               className={[
                 'aspect-square flex items-center justify-center rounded-lg text-xs font-medium select-none',
-                isPast ? 'text-white/25' : '',
-                isBusy ? 'bg-coral/80 text-white' : '',
-                !isPast && !isBusy ? 'bg-white/10 text-white hover:bg-white/20' : '',
-                isToday ? 'ring-2 ring-white ring-offset-1 ring-offset-transparent' : '',
+                isPast ? 'text-white/20' : '',
+                isBusy ? 'bg-coral text-white font-bold' : '',
+                !isPast && !isBusy ? 'bg-white/20 text-white' : '',
+                isToday ? 'ring-2 ring-white' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -166,11 +166,11 @@ export default function AvailabilityCalendarClient() {
       </div>
       <div className="flex items-center gap-6 justify-center mt-6 text-xs text-white/70">
         <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded bg-coral/80 inline-block" />
+          <span className="w-3 h-3 rounded bg-coral inline-block" />
           Booked
         </span>
         <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded bg-white/10 inline-block" />
+          <span className="w-3 h-3 rounded bg-white/20 inline-block" />
           Available
         </span>
       </div>
