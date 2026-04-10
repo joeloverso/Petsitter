@@ -43,10 +43,27 @@ export async function GET() {
       })
     }
 
-    const busy: { start: string; end: string }[] =
-      body.calendars?.[CALENDAR_ID]?.busy ?? []
+    const calData = body.calendars?.[CALENDAR_ID]
+    const calErrors = calData?.errors
 
-    return NextResponse.json({ busy, configured: true })
+    if (calErrors?.length) {
+      const reason = calErrors[0]?.reason ?? 'unknown'
+      console.error('[freebusy] calendar error:', calErrors)
+      return NextResponse.json({
+        busy: [],
+        configured: true,
+        error: true,
+        debug: `Calendar not accessible: ${reason}. Make sure the calendar is set to "Make available to public" in Google Calendar settings.`,
+      })
+    }
+
+    const busy: { start: string; end: string }[] = calData?.busy ?? []
+
+    return NextResponse.json({
+      busy,
+      configured: true,
+      debug: busy.length === 0 ? 'API reachable but 0 busy slots returned. Events must be marked as "Busy" (not "Free") in Google Calendar to appear here. All-day events default to Free.' : null,
+    })
   } catch (err) {
     console.error('[freebusy] fetch failed:', err)
     return NextResponse.json({

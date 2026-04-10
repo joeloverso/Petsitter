@@ -110,6 +110,7 @@ export default function AvailabilityCalendarClient() {
         }
         setBusyDates(getBusyDateSet(data.busy ?? []))
         setStatus('ok')
+        if (data.debug) setDebugMsg(data.debug)
       })
       .catch((e) => {
         setDebugMsg(String(e))
@@ -164,6 +165,9 @@ export default function AvailabilityCalendarClient() {
           />
         ))}
       </div>
+      {debugMsg && (
+        <p className="text-white/30 text-xs font-mono text-center mt-4">{debugMsg}</p>
+      )}
       <div className="flex items-center gap-6 justify-center mt-6 text-xs text-white/70">
         <span className="flex items-center gap-2">
           <span className="w-3 h-3 rounded bg-coral inline-block" />
