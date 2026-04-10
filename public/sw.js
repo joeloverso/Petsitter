@@ -7,11 +7,20 @@ self.addEventListener('push', (event) => {
     badge: '/images/Transparent_Logo_Icons.png',
     data: { url: data.url || '/admin/messages' },
   }
-  event.waitUntil(self.registration.showNotification(title, options))
+
+  event.waitUntil(
+    Promise.all([
+      self.registration.showNotification(title, options),
+      navigator.setAppBadge ? navigator.setAppBadge() : Promise.resolve(),
+    ])
+  )
 })
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
+
+  if (navigator.clearAppBadge) navigator.clearAppBadge()
+
   const url = event.notification.data?.url || '/admin/messages'
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
