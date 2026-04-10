@@ -1,52 +1,31 @@
+import { createClient } from '@/lib/supabase/server'
 import ServiceCard from '@/components/ui/ServiceCard'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const services = [
+const ICONS: Record<string, string> = {
+  'Pet Sitting Visit': '🐾',
+  'Overnight Stay': '🌙',
+  'Dog Walking': '🦮',
+}
+
+const fallbackServices = [
   {
-    icon: '🐾',
-    title: 'Pet Sitting Visit',
-    description:
-      'In-home visits for your furry friends while you\'re away. Includes feeding, walking, playtime, and medication if needed.',
-    pricing: [
-      '$40: 1-2 dogs or cats',
-      '$45: 2+ dogs & cats together',
-      '+$15: medication administration',
-    ],
-    notes: [
-      'Visits 30 min – 1 hour depending on your pet\'s needs',
-      'Insulin, oral, topical & injectable meds',
-    ],
+    name: 'Pet Sitting Visit',
+    description: 'In-home visits for your furry friends while you\'re away. Includes feeding, walking, playtime, and medication if needed.',
+    pricing_notes: '$40: 1-2 dogs or cats\n$45: 2+ dogs & cats together\n+$15: medication administration',
+    active: true,
   },
   {
-    icon: '🌙',
-    title: 'Overnight Stay',
-    description:
-      'I stay overnight in your home so your pets never feel alone. Includes everything in a pet sitting visit plus overnight companionship.',
-    pricing: [
-      '$110/night: 1-2 dogs',
-      '$130/night: 2+ dogs',
-      '$135/night: 2+ dogs & cats',
-      '+$25/night: holidays',
-    ],
-    notes: [
-      'Ideal for anxious pets or long trips',
-      'Your home stays cared for too',
-    ],
+    name: 'Overnight Stay',
+    description: 'I stay overnight in your home so your pets never feel alone. Includes everything in a pet sitting visit plus overnight companionship.',
+    pricing_notes: '$110/night: 1-2 dogs\n$130/night: 2+ dogs\n$135/night: 2+ dogs & cats\n+$25/night: holidays',
+    active: true,
   },
   {
-    icon: '🦮',
-    title: 'Dog Walking',
-    description:
-      'Standalone dog walking service for when your pup just needs to stretch their legs and get some fresh air.',
-    pricing: [
-      '$30 per walk',
-      'Standalone service only',
-      'Included free in visit & overnight gigs',
-    ],
-    notes: [
-      'All friendly breeds welcome',
-      'Does not accept aggressive dogs',
-    ],
+    name: 'Dog Walking',
+    description: 'Standalone dog walking service for when your pup just needs to stretch their legs and get some fresh air.',
+    pricing_notes: '$30 per walk\nStandalone service only\nIncluded free in visit & overnight gigs',
+    active: true,
   },
 ]
 
@@ -55,7 +34,16 @@ const addons = [
   { label: 'Holiday surcharge', price: '+$25/day' },
 ]
 
-export default function Services() {
+export default async function Services() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('services')
+    .select('name, description, pricing_notes, active')
+    .eq('active', true)
+    .order('sort_order')
+
+  const services = data && data.length > 0 ? data : fallbackServices
+
   return (
     <section id="services" className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,11 +62,16 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {services.map((s) => (
-            <ServiceCard key={s.title} {...s} />
+            <ServiceCard
+              key={s.name}
+              icon={ICONS[s.name] ?? '🐾'}
+              title={s.name}
+              description={s.description}
+              pricing={s.pricing_notes.split('\n').filter(Boolean)}
+            />
           ))}
         </div>
 
-        {/* Add-ons callout */}
         <div className="bg-sunshine/20 rounded-3xl p-6 flex flex-wrap gap-6 justify-center border border-sunshine/40">
           <p className="font-semibold text-driftwood w-full text-center mb-1">Add-ons</p>
           {addons.map((a) => (
@@ -91,7 +84,6 @@ export default function Services() {
           ))}
         </div>
 
-        {/* Policy note */}
         <p className="text-center text-sm text-gray-400 mt-6">
           Holidays not available: Christmas Eve, Christmas Day, Thanksgiving, Easter, Valentine&apos;s Day
         </p>
