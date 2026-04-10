@@ -119,7 +119,7 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
               className="w-full border border-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-ocean resize-none"
               value={service.pricing_notes}
               onChange={(e) => updateField(service.id, 'pricing_notes', e.target.value)}
-              placeholder="One pricing line per row, e.g. $40 — 1-2 dogs or cats"
+              placeholder="One pricing line per row, e.g. $40: 1-2 dogs or cats"
             />
           </div>
 

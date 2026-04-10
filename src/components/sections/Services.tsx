@@ -8,9 +8,9 @@ const services = [
     description:
       'In-home visits for your furry friends while you\'re away. Includes feeding, walking, playtime, and medication if needed.',
     pricing: [
-      '$40 — 1-2 dogs or cats',
-      '$45 — 2+ dogs & cats together',
-      '+$15 — medication administration',
+      '$40: 1-2 dogs or cats',
+      '$45: 2+ dogs & cats together',
+      '+$15: medication administration',
     ],
     notes: [
       'Visits 30 min – 1 hour depending on your pet\'s needs',
@@ -23,10 +23,10 @@ const services = [
     description:
       'I stay overnight in your home so your pets never feel alone. Includes everything in a pet sitting visit plus overnight companionship.',
     pricing: [
-      '$110/night — 1-2 dogs',
-      '$130/night — 2+ dogs',
-      '$135/night — 2+ dogs & cats',
-      '+$25/night — holidays',
+      '$110/night: 1-2 dogs',
+      '$130/night: 2+ dogs',
+      '$135/night: 2+ dogs & cats',
+      '+$25/night: holidays',
     ],
     notes: [
       'Ideal for anxious pets or long trips',
@@ -67,7 +67,7 @@ export default function Services() {
             Petsitting Services
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
-            Every service comes with a free meet & greet for new clients —
+            Every service comes with a free meet & greet for new clients,
             because your peace of mind matters just as much as your pet&apos;s happiness.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function Services() {
             <div key={a.label} className="flex items-center gap-2 text-sm text-gray-600">
               <span className="text-coral font-bold text-base">✦</span>
               <span>
-                <strong>{a.price}</strong> — {a.label}
+                <strong>{a.price}</strong>: {a.label}
               </span>
             </div>
           ))}

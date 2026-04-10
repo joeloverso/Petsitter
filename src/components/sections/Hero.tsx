@@ -26,7 +26,7 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
             </p>
             <p className="text-gray-600 text-lg leading-relaxed mb-8 max-w-lg">
               Professional pet & home care with a personal touch.
-              Your fur babies deserve the best — and that&apos;s exactly what they&apos;ll get.
+              Your fur babies deserve the best, and that&apos;s exactly what they&apos;ll get.
             </p>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <a
@@ -49,7 +49,7 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
             <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-white shadow-2xl">
               <Image
                 src={imageSrc}
-                alt="Brooke Maisano — Trusty Paws Co."
+                alt="Brooke Maisano, Trusty Paws Co."
                 fill
                 className="object-cover"
                 priority

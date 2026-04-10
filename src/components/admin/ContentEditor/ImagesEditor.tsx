@@ -18,22 +18,22 @@ const slots: ImageSlot[] = [
   {
     key: 'pet_1',
     label: 'Pet Photo 1',
-    description: 'Photo of you with pets — shown in the About section.',
+    description: 'Photo of you with pets, shown in the About section.',
   },
   {
     key: 'pet_2',
     label: 'Pet Photo 2',
-    description: 'Second photo of you with pets — shown in the About section.',
+    description: 'Second photo of you with pets, shown in the About section.',
   },
   {
     key: 'family_1',
     label: 'Family Photo 1',
-    description: 'Family photo — shown in the About section.',
+    description: 'Family photo, shown in the About section.',
   },
   {
     key: 'family_2',
     label: 'Family Photo 2',
-    description: 'Second family photo — shown in the About section (optional).',
+    description: 'Second family photo, shown in the About section (optional).',
   },
 ]
 
@@ -47,6 +47,7 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
     Object.fromEntries(initialImages.map((img) => [img.key, img.url]))
   )
   const [uploading, setUploading] = useState<string | null>(null)
+  const [removing, setRemoving] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
@@ -75,6 +76,32 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
     setUploading(null)
   }
 
+  async function handleRemove(key: string) {
+    setRemoving(key)
+    setError(null)
+
+    const res = await fetch('/api/admin/upload-image', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key }),
+    })
+
+    const json = await res.json()
+
+    if (!res.ok) {
+      setError(`Remove failed: ${json.error ?? 'Unknown error'}`)
+      setRemoving(null)
+      return
+    }
+
+    setImages((prev) => {
+      const next = { ...prev }
+      delete next[key]
+      return next
+    })
+    setRemoving(null)
+  }
+
   return (
     <div className="space-y-6">
       {error && (
@@ -86,6 +113,7 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
       {slots.map((slot) => {
         const currentUrl = images[slot.key]
         const isUploading = uploading === slot.key
+        const isRemoving = removing === slot.key
 
         return (
           <div key={slot.key} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -105,7 +133,7 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
                     🐾
                   </div>
                 )}
-                {isUploading && (
+                {(isUploading || isRemoving) && (
                   <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
                     <div className="w-6 h-6 border-2 border-ocean border-t-transparent rounded-full animate-spin" />
                   </div>
@@ -129,13 +157,25 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
                   }}
                 />
 
-                <button
-                  onClick={() => inputRefs.current[slot.key]?.click()}
-                  disabled={isUploading}
-                  className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
-                >
-                  {isUploading ? 'Uploading...' : currentUrl ? 'Replace Photo' : 'Upload Photo'}
-                </button>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    onClick={() => inputRefs.current[slot.key]?.click()}
+                    disabled={isUploading || isRemoving}
+                    className="px-5 py-2 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors disabled:opacity-60"
+                  >
+                    {isUploading ? 'Uploading...' : currentUrl ? 'Replace Photo' : 'Upload Photo'}
+                  </button>
+
+                  {currentUrl && (
+                    <button
+                      onClick={() => handleRemove(slot.key)}
+                      disabled={isUploading || isRemoving}
+                      className="px-5 py-2 bg-white text-coral border-2 border-coral rounded-full text-sm font-bold hover:bg-coral hover:text-white transition-colors disabled:opacity-60"
+                    >
+                      {isRemoving ? 'Removing...' : 'Remove Photo'}
+                    </button>
+                  )}
+                </div>
 
                 {currentUrl && (
                   <p className="text-xs text-gray-400 mt-2 truncate max-w-xs">

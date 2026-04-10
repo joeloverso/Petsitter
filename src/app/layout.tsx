@@ -4,9 +4,9 @@ import PageViewTracker from '@/components/PageViewTracker'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Brooke's Trusty Paws Co. — Palm Beach's Favorite Pet Sitter",
+  title: "Brooke's Trusty Paws Co. | Palm Beach's Favorite Pet Sitter",
   description:
-    'Professional pet & home care in the West Palm Beach area. In-home visits, overnight stays, and dog walking by Brooke Maisano — 4 years vet experience, all friendly breeds welcome.',
+    'Professional pet & home care in the West Palm Beach area. In-home visits, overnight stays, and dog walking by Brooke Maisano. 4 years vet experience, all friendly breeds welcome.',
   keywords: [
     'pet sitter West Palm Beach',
     'dog sitter Palm Beach',

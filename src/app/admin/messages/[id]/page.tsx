@@ -43,11 +43,11 @@ export default async function MessageDetail({ params }: { params: Promise<{ id: 
         <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-xl text-sm">
           <div>
             <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-1">Email</p>
-            <p className="text-gray-700">{msg.email || '—'}</p>
+            <p className="text-gray-700">{msg.email || 'N/A'}</p>
           </div>
           <div>
             <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-1">Phone</p>
-            <p className="text-gray-700">{msg.phone || '—'}</p>
+            <p className="text-gray-700">{msg.phone || 'N/A'}</p>
           </div>
           <div>
             <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-1">Preferred Contact</p>
@@ -65,7 +65,7 @@ export default async function MessageDetail({ params }: { params: Promise<{ id: 
         <div className="flex flex-wrap gap-3 pt-6 border-t border-gray-100">
           {msg.email && (
             <a
-              href={`mailto:${msg.email}?subject=Re: Your inquiry — Brooke's Trusty Paws Co.`}
+              href={`mailto:${msg.email}?subject=Re: Your Inquiry - Brooke's Trusty Paws Co.`}
               className="flex items-center gap-2 px-5 py-2.5 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors"
             >
               ✉️ Reply via Email
@@ -81,7 +81,7 @@ export default async function MessageDetail({ params }: { params: Promise<{ id: 
           )}
           {!msg.phone && phoneNumber && (
             <p className="text-xs text-gray-400 self-center">
-              No phone provided — use email to reply
+              No phone provided. Use email to reply.
             </p>
           )}
         </div>

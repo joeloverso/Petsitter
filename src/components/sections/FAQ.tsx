@@ -5,7 +5,7 @@ const faqs = [
   {
     question: 'How do I book?',
     answer:
-      'You can reach Brooke by text or email — links are in the Contact section below. For new clients, a free meet & greet is required before the first booking.',
+      'You can reach Brooke by text or email; links are in the Contact section below. For new clients, a free meet & greet is required before the first booking.',
   },
   {
     question: 'How far in advance do I need to book?',
@@ -35,7 +35,7 @@ const faqs = [
   {
     question: 'Do you require a meet & greet?',
     answer:
-      'Yes — a free meet & greet is required for all new clients before the first booking. This lets Brooke get to know your pet and ensures it\'s a good fit.',
+      'Yes, a free meet & greet is required for all new clients before the first booking. This lets Brooke get to know your pet and ensures it\'s a good fit.',
   },
   {
     question: 'Do you accept all breeds?',

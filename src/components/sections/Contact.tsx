@@ -44,7 +44,7 @@ export default function Contact() {
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
             Reach out by text or email, or fill out the form below.
-            New clients — a free meet & greet is required before your first booking.
+            New clients: a free meet & greet is required before your first booking.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export default function Contact() {
             )}
             {status === 'error' && (
               <p className="text-center text-sm text-coral font-semibold">
-                Something went wrong — try texting or emailing directly.
+                Something went wrong. Try texting or emailing directly.
               </p>
             )}
           </form>

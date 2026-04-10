@@ -34,14 +34,6 @@ export default async function AdminDashboard() {
           <h1 className="font-display text-2xl sm:text-3xl text-driftwood mb-0.5 truncate"><span className="sm:hidden">Dash</span><span className="hidden sm:inline">Dashboard</span></h1>
           <p className="text-gray-400 text-sm sm:text-base">Welcome back punk</p>
         </div>
-        <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-sand shadow-md shrink-0">
-          <Image
-            src="/images/Brooke_Profile_Trimmed.png"
-            alt="Brooke"
-            fill
-            className="object-cover"
-          />
-        </div>
       </div>
 
       {/* Stat cards */}

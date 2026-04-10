@@ -72,12 +72,12 @@ export default function About({ petImageUrls, familyImageUrls }: AboutProps) {
             <p className="text-gray-600 leading-relaxed mb-6">
               I&apos;m a pet sitter born and raised in Wellington, FL with a lifelong love for animals.
               I&apos;ve spent 4 years working in a veterinary clinic and have been pet sitting
-              professionally for 3 years — giving me a unique ability to care for pets with
+              professionally for 3 years, giving me a unique ability to care for pets with
               special medical needs alongside everyday companionship.
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
               I work with dogs, cats, birds, fish, snakes, reptiles, and all kinds of furry friends.
-              Every pet gets treated like my own — with patience, love, and plenty of playtime.
+              Every pet gets treated like my own, with patience, love, and plenty of playtime.
             </p>
             <div className="flex flex-wrap gap-3">
               {badges.map((b) => (

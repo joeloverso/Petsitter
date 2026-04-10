@@ -140,7 +140,7 @@ export default function CostEstimator() {
               ${estimate.toLocaleString()}
             </p>
             <p className="text-xs text-gray-400 mt-2">
-              Estimate only — final pricing confirmed at booking
+              Estimate only. Final pricing confirmed at booking.
             </p>
           </div>
         </div>

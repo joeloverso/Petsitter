@@ -14,7 +14,7 @@ export default function AvailabilityCalendar() {
             Availability
           </h2>
           <p className="text-white/80 max-w-xl mx-auto">
-            View my availability below. Blocked dates are booked — reach out to confirm open dates.
+            View my availability below. Blocked dates are booked; reach out to confirm open dates.
           </p>
         </div>
 
@@ -35,7 +35,7 @@ export default function AvailabilityCalendar() {
         </div>
 
         <p className="text-center text-white/50 text-xs mt-4">
-          Showing free/busy only — contact Brooke to book a specific date
+          Showing free/busy only. Contact Brooke to book a specific date.
         </p>
       </div>
 

@@ -22,7 +22,7 @@ export default function ServiceArea() {
             Service Area
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
-            Based in Wellington, FL — proudly serving the greater Palm Beach area.
+            Based in Wellington, FL, proudly serving the greater Palm Beach area.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function ServiceArea() {
         </div>
 
         <p className="text-center text-sm text-gray-400 mt-8">
-          Don&apos;t see your zip code? Reach out — I may still be able to help!
+          Don&apos;t see your zip code? Reach out; I may still be able to help!
         </p>
       </div>
 
