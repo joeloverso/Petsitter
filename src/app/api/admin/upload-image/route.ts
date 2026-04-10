@@ -39,7 +39,9 @@ export async function POST(request: NextRequest) {
     .from('site-images')
     .getPublicUrl(path)
 
-  const publicUrl = urlData.publicUrl
+  // Append a cache-buster so CDN/browsers fetch the new file instead of serving
+  // the cached version at the same URL
+  const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`
 
   const { error: dbError } = await serviceClient
     .from('site_images')
