@@ -36,7 +36,7 @@ export default async function ServiceArea() {
         />
 
         <p className="text-center text-sm text-gray-400 mt-6">
-          Outside the area? Reach out — I may still be able to help.
+          Outside the area? Reach out. I may still be able to help.
         </p>
       </div>
 
