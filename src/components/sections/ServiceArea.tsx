@@ -1,8 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import WaveDivider from '@/components/layout/WaveDivider'
-import dynamic from 'next/dynamic'
-
-const ServiceAreaMap = dynamic(() => import('./ServiceAreaMap'), { ssr: false })
+import ServiceAreaMap from './ServiceAreaMapClient'
 
 // Wellington, FL — fallback if DB row is missing
 const DEFAULT_CONFIG = { home_lat: 26.6599, home_lng: -80.2423, radius_miles: 20 }
