@@ -20,11 +20,12 @@ export interface Service {
   sort_order: number
 }
 
-export interface ServiceArea {
+export interface ServiceAreaConfig {
   id: string
-  city: string
-  zip_codes: string[]
-  sort_order: number
+  home_zip: string
+  home_lat: number
+  home_lng: number
+  radius_miles: number
 }
 
 export interface FAQ {
@@ -40,16 +41,24 @@ export interface SiteImage {
   url: string
 }
 
+const DEFAULT_SERVICE_AREA_CONFIG: ServiceAreaConfig = {
+  id: '',
+  home_zip: '33414',
+  home_lat: 26.6599,
+  home_lng: -80.2423,
+  radius_miles: 20,
+}
+
 interface Props {
   initialServices: Service[]
-  initialServiceArea: ServiceArea[]
+  initialServiceAreaConfig: ServiceAreaConfig | null
   initialFaqs: FAQ[]
   initialImages: SiteImage[]
 }
 
 export default function ContentTabs({
   initialServices,
-  initialServiceArea,
+  initialServiceAreaConfig,
   initialFaqs,
   initialImages,
 }: Props) {
@@ -75,7 +84,7 @@ export default function ContentTabs({
       </div>
 
       <div className={activeTab === 'Services' ? '' : 'hidden'}><ServicesEditor initialServices={initialServices} /></div>
-      <div className={activeTab === 'Service Area' ? '' : 'hidden'}><ServiceAreaEditor initialServiceArea={initialServiceArea} /></div>
+      <div className={activeTab === 'Service Area' ? '' : 'hidden'}><ServiceAreaEditor initialConfig={initialServiceAreaConfig ?? DEFAULT_SERVICE_AREA_CONFIG} /></div>
       <div className={activeTab === 'FAQs' ? '' : 'hidden'}><FAQEditor initialFaqs={initialFaqs} /></div>
       <div className={activeTab === 'Photos' ? '' : 'hidden'}><ImagesEditor initialImages={initialImages} /></div>
     </div>

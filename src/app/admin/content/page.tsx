@@ -6,10 +6,10 @@ export const dynamic = 'force-dynamic'
 export default async function ContentPage() {
   const supabase = await createClient()
 
-  const [{ data: services }, { data: serviceArea }, { data: faqs }, { data: images }] =
+  const [{ data: services }, { data: serviceAreaConfig }, { data: faqs }, { data: images }] =
     await Promise.all([
       supabase.from('services').select('*').order('sort_order'),
-      supabase.from('service_area').select('*').order('sort_order'),
+      supabase.from('service_area_config').select('*').single(),
       supabase.from('faqs').select('*').order('sort_order'),
       supabase.from('site_images').select('key, url'),
     ])
@@ -22,7 +22,7 @@ export default async function ContentPage() {
       </p>
       <ContentTabs
         initialServices={services ?? []}
-        initialServiceArea={serviceArea ?? []}
+        initialServiceAreaConfig={serviceAreaConfig ?? null}
         initialFaqs={faqs ?? []}
         initialImages={images ?? []}
       />

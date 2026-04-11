@@ -108,42 +108,41 @@ export async function removeService(id: string) {
   if (error) throw new Error(error.message)
 }
 
-// ─── Service Area ─────────────────────────────────────────────────────────────
+// ─── Service Area Config ──────────────────────────────────────────────────────
 
-export async function saveServiceArea(id: string, city: string, zip_codes: string[]) {
-  await requireAuth()
-  const db = await createServiceClient()
-  const { error } = await db.from('service_area').update({ city, zip_codes }).eq('id', id)
-  if (error) throw new Error(error.message)
+async function geocodeZip(zip: string): Promise<{ lat: number; lng: number }> {
+  const params = new URLSearchParams({
+    postalcode: zip,
+    countrycodes: 'us',
+    format: 'json',
+    limit: '1',
+  })
+  const res = await fetch(`https://nominatim.openstreetmap.org/search?${params}`, {
+    headers: { 'Accept-Language': 'en', 'User-Agent': 'trustypawco.com' },
+  })
+  const data = await res.json()
+  if (!data || data.length === 0) throw new Error(`Could not find coordinates for zip code ${zip}.`)
+  return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) }
 }
 
-export async function addServiceArea(sort_order: number) {
+export async function saveServiceAreaConfig(homeZip: string, radiusMiles: number) {
   await requireAuth()
   const db = await createServiceClient()
-  const { data, error } = await db
-    .from('service_area')
-    .insert({ city: 'New City', zip_codes: [], sort_order })
-    .select()
-    .single()
-  if (error) throw new Error(error.message)
-  return data as { id: string; city: string; zip_codes: string[]; sort_order: number }
-}
 
-export async function removeServiceArea(id: string) {
-  await requireAuth()
-  const db = await createServiceClient()
-  const { error } = await db.from('service_area').delete().eq('id', id)
-  if (error) throw new Error(error.message)
-}
+  const { lat, lng } = await geocodeZip(homeZip)
 
-export async function reorderServiceAreas(updates: { id: string; sort_order: number }[]) {
-  await requireAuth()
-  const db = await createServiceClient()
-  const results = await Promise.all(
-    updates.map(({ id, sort_order }) =>
-      db.from('service_area').update({ sort_order }).eq('id', id)
-    )
-  )
-  const failed = results.find((r) => r.error)
-  if (failed?.error) throw new Error(failed.error.message)
+  // Upsert — table always has exactly one row
+  const { data: existing } = await db.from('service_area_config').select('id').single()
+  if (existing?.id) {
+    const { error } = await db
+      .from('service_area_config')
+      .update({ home_zip: homeZip, home_lat: lat, home_lng: lng, radius_miles: radiusMiles })
+      .eq('id', existing.id)
+    if (error) throw new Error(error.message)
+  } else {
+    const { error } = await db
+      .from('service_area_config')
+      .insert({ home_zip: homeZip, home_lat: lat, home_lng: lng, radius_miles: radiusMiles })
+    if (error) throw new Error(error.message)
+  }
 }
