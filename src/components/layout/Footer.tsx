@@ -29,15 +29,15 @@ const navLinks = [
 
 const { social } = siteConfig
 
-type SocialLink = { label: string; href: string | undefined; Icon: IconType | (({ size }: { size?: number }) => React.JSX.Element) }
+type SocialLink = { label: string; href: string | undefined; Icon: IconType | (({ size }: { size?: number }) => React.JSX.Element); color: string }
 
 const socialLinks: SocialLink[] = [
-  { label: 'Rover',     href: social.rover,     Icon: RoverIcon },
-  { label: 'Yelp',      href: social.yelp,       Icon: FaYelp },
-  { label: 'Nextdoor',  href: social.nextdoor,   Icon: SiNextdoor },
-  ...(social.instagram ? [{ label: 'Instagram', href: social.instagram, Icon: FaInstagram }] : []),
-  ...(social.facebook  ? [{ label: 'Facebook',  href: social.facebook,  Icon: FaFacebookF }] : []),
-  ...(social.tiktok    ? [{ label: 'TikTok',    href: social.tiktok,    Icon: FaTiktok }] : []),
+  { label: 'Rover',     href: social.rover,     Icon: RoverIcon,    color: '#00B494' },
+  { label: 'Yelp',      href: social.yelp,       Icon: FaYelp,       color: '#D32323' },
+  { label: 'Nextdoor',  href: social.nextdoor,   Icon: SiNextdoor,   color: '#00B246' },
+  ...(social.instagram ? [{ label: 'Instagram', href: social.instagram, Icon: FaInstagram, color: '#E1306C' }] : []),
+  ...(social.facebook  ? [{ label: 'Facebook',  href: social.facebook,  Icon: FaFacebookF, color: '#1877F2' }] : []),
+  ...(social.tiktok    ? [{ label: 'TikTok',    href: social.tiktok,    Icon: FaTiktok,    color: '#010101' }] : []),
 ].filter((s) => s.href)
 
 export default function Footer() {
@@ -69,7 +69,8 @@ export default function Footer() {
                   aria-label={s.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-white hover:opacity-85 flex items-center justify-center transition-opacity shadow-sm"
+                  style={{ color: s.color }}
                 >
                   <s.Icon size={18} />
                 </a>
