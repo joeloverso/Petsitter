@@ -13,7 +13,7 @@ export default function AvailabilityCalendar() {
             Availability
           </h2>
           <p className="text-white/80 max-w-xl mx-auto">
-            View my availability below. Booked dates are highlighted in red; reach out to confirm open dates.
+            View my availability below. Booked dates are highlighted in red. Reach out to confirm open dates.
           </p>
         </div>
 
