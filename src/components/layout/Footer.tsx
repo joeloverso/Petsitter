@@ -1,5 +1,23 @@
+import React from 'react'
 import Image from 'next/image'
+import { FaInstagram, FaFacebookF, FaTiktok, FaYelp } from 'react-icons/fa'
+import { SiNextdoor } from 'react-icons/si'
+import type { IconType } from 'react-icons'
 import { siteConfig } from '@/lib/config'
+
+function RoverIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      {/* Paw print */}
+      <circle cx="6.5" cy="9" r="1.4" />
+      <circle cx="10" cy="7" r="1.4" />
+      <circle cx="13.5" cy="7" r="1.4" />
+      <ellipse cx="10" cy="13" rx="3.8" ry="3" />
+      {/* R letterform */}
+      <path d="M14.5 9h2.2c1 0 1.8.7 1.8 1.6 0 .7-.4 1.3-1 1.5l1.2 2H17l-1-1.8h-.5V14h-1V9zm1 2.4h1.1c.4 0 .7-.3.7-.7s-.3-.7-.7-.7h-1.1v1.4z" />
+    </svg>
+  )
+}
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -11,13 +29,15 @@ const navLinks = [
 
 const { social } = siteConfig
 
-const socialLinks = [
-  { label: 'Rover',     href: social.rover,     icon: '🐾' },
-  { label: 'Yelp',      href: social.yelp,       icon: '⭐' },
-  { label: 'Nextdoor',  href: social.nextdoor,   icon: '🏡' },
-  ...(social.instagram ? [{ label: 'Instagram', href: social.instagram, icon: '📸' }] : []),
-  ...(social.facebook  ? [{ label: 'Facebook',  href: social.facebook,  icon: '📘' }] : []),
-  ...(social.tiktok    ? [{ label: 'TikTok',    href: social.tiktok,    icon: '🎵' }] : []),
+type SocialLink = { label: string; href: string | undefined; Icon: IconType | (({ size }: { size?: number }) => React.JSX.Element) }
+
+const socialLinks: SocialLink[] = [
+  { label: 'Rover',     href: social.rover,     Icon: RoverIcon },
+  { label: 'Yelp',      href: social.yelp,       Icon: FaYelp },
+  { label: 'Nextdoor',  href: social.nextdoor,   Icon: SiNextdoor },
+  ...(social.instagram ? [{ label: 'Instagram', href: social.instagram, Icon: FaInstagram }] : []),
+  ...(social.facebook  ? [{ label: 'Facebook',  href: social.facebook,  Icon: FaFacebookF }] : []),
+  ...(social.tiktok    ? [{ label: 'TikTok',    href: social.tiktok,    Icon: FaTiktok }] : []),
 ].filter((s) => s.href)
 
 export default function Footer() {
@@ -49,9 +69,9 @@ export default function Footer() {
                   aria-label={s.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-base"
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
                 >
-                  {s.icon}
+                  <s.Icon size={18} />
                 </a>
               ))}
             </div>
