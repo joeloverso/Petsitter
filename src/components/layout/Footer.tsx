@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { siteConfig } from '@/lib/config'
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -8,11 +9,16 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ]
 
-// Social links — add hrefs when accounts are ready
+const { social } = siteConfig
+
 const socialLinks = [
-  { label: 'Instagram', href: '#', icon: '📸' },
-  { label: 'Facebook', href: '#', icon: '📘' },
-]
+  { label: 'Rover',     href: social.rover,     icon: '🐾' },
+  { label: 'Yelp',      href: social.yelp,       icon: '⭐' },
+  { label: 'Nextdoor',  href: social.nextdoor,   icon: '🏡' },
+  ...(social.instagram ? [{ label: 'Instagram', href: social.instagram, icon: '📸' }] : []),
+  ...(social.facebook  ? [{ label: 'Facebook',  href: social.facebook,  icon: '📘' }] : []),
+  ...(social.tiktok    ? [{ label: 'TikTok',    href: social.tiktok,    icon: '🎵' }] : []),
+].filter((s) => s.href)
 
 export default function Footer() {
   return (
@@ -41,6 +47,8 @@ export default function Footer() {
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-base"
                 >
                   {s.icon}
