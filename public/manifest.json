@@ -3,6 +3,7 @@
   "short_name": "Trusty Paws",
   "description": "Owner portal for Brooke's Trusty Paws Co.",
   "start_url": "/admin/dashboard",
+  "scope": "/admin/",
   "display": "standalone",
   "background_color": "#dabea0",
   "theme_color": "#8b6f4e",
@@ -10,15 +11,15 @@
   "icons": [
     {
       "src": "/images/Transparent_Logo_Icons.png",
-      "sizes": "192x192",
+      "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/images/Transparent_Logo_Icons.png",
-      "sizes": "512x512",
+      "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }

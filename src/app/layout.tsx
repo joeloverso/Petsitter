@@ -102,6 +102,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth">
       <head>
+        {/* iOS home screen icon — Safari reads this, not the manifest */}
+        <link rel="apple-touch-icon" href="/images/Transparent_Logo_Icons.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
