@@ -161,6 +161,8 @@ export default function ServiceAreaMap({ centerLat, centerLng, radiusMiles }: Pr
         <p className="font-semibold text-driftwood mb-3">Check if your zip code is covered</p>
         <div className="flex gap-3 flex-wrap">
           <input
+            id="zip-checker"
+            name="zip"
             type="text"
             inputMode="numeric"
             maxLength={5}

@@ -86,8 +86,10 @@ export default function Contact() {
           {/* Contact form */}
           <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-md p-8 border border-sand/50 flex flex-col gap-4">
             <div>
-              <label className="block text-sm font-semibold text-driftwood mb-1">Name *</label>
+              <label htmlFor="contact-name" className="block text-sm font-semibold text-driftwood mb-1">Name *</label>
               <input
+                id="contact-name"
+                name="name"
                 required
                 type="text"
                 value={form.name}
@@ -97,8 +99,10 @@ export default function Contact() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-driftwood mb-1">Email</label>
+              <label htmlFor="contact-email" className="block text-sm font-semibold text-driftwood mb-1">Email</label>
               <input
+                id="contact-email"
+                name="email"
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -107,8 +111,10 @@ export default function Contact() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-driftwood mb-1">Phone</label>
+              <label htmlFor="contact-phone" className="block text-sm font-semibold text-driftwood mb-1">Phone</label>
               <input
+                id="contact-phone"
+                name="phone"
                 type="tel"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -137,8 +143,10 @@ export default function Contact() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-driftwood mb-1">Message *</label>
+              <label htmlFor="contact-message" className="block text-sm font-semibold text-driftwood mb-1">Message *</label>
               <textarea
+                id="contact-message"
+                name="message"
                 required
                 rows={4}
                 value={form.message}
