@@ -126,9 +126,9 @@ export default function Contact() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-driftwood mb-2">
+              <p className="block text-sm font-semibold text-driftwood mb-2">
                 Preferred response method
-              </label>
+              </p>
               <div className="flex gap-4">
                 {['email', 'text'].map((method) => (
                   <label key={method} className="flex items-center gap-2 cursor-pointer">
