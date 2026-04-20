@@ -24,7 +24,7 @@ export default async function AdminDashboard() {
       {/* Header banner */}
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-8 flex items-center gap-3 sm:gap-6">
         <Image
-          src="/images/Transparent_Logo.png"
+          src="/images/Transparent_Logo.webp"
           alt="Brooke's Trusty Paws Co."
           width={100}
           height={100}

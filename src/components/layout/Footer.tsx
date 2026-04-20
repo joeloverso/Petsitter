@@ -49,7 +49,7 @@ export default function Footer() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Image
-                src="/images/Transparent_Logo_Icons.png"
+                src="/images/Transparent_Logo_Icons.webp"
                 alt="Brooke's Trusty Paws Co."
                 width={44}
                 height={44}

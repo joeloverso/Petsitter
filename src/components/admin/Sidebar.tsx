@@ -28,7 +28,7 @@ export default function AdminSidebar() {
       {/* Brand */}
       <div className="p-4 border-b border-white/10 flex items-center gap-3">
         <Image
-          src="/images/Transparent_Logo_Icons.png"
+          src="/images/Transparent_Logo_Icons.webp"
           alt="Logo"
           width={32}
           height={32}

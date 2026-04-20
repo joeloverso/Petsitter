@@ -22,7 +22,7 @@ export default function AdminLogin() {
       <div className="bg-white rounded-3xl shadow-xl p-10 w-full max-w-md border border-sand/50">
         <div className="flex flex-col items-center mb-10">
           <Image
-            src="/images/Transparent_Logo_Icons.png"
+            src="/images/Transparent_Logo_Icons.webp"
             alt="Trusty Paws Co."
             width={64}
             height={64}

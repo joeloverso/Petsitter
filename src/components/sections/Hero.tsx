@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const FALLBACK_PROFILE = '/images/Profile_Sihouette.png'
+const FALLBACK_PROFILE = '/images/Profile_Sihouette.webp'
 
 export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
   const imageSrc = profileImageUrl || FALLBACK_PROFILE
@@ -51,9 +51,9 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
                 src={imageSrc}
                 alt="Brooke Maisano, Trusty Paws Co."
                 fill
+                sizes="(max-width: 768px) 288px, 384px"
                 className="object-cover"
                 priority
-                unoptimized={imageSrc.startsWith('http')}
               />
             </div>
           </div>

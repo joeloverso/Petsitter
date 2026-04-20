@@ -118,7 +118,7 @@ export default function PWASetup() {
         <div className="bg-white rounded-2xl shadow-xl border border-sand p-4 max-w-sm mx-auto">
           <div className="flex items-start gap-3 mb-3">
             <Image
-              src="/images/Transparent_Logo_Icons.png"
+              src="/images/Transparent_Logo_Icons.webp"
               alt=""
               width={44}
               height={44}

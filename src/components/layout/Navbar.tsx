@@ -21,7 +21,7 @@ export default function Navbar() {
         {/* Logo + name */}
         <a href="#hero" className="flex items-center gap-3">
           <Image
-            src="/images/Transparent_Logo_Icons.png"
+            src="/images/Transparent_Logo_Icons.webp"
             alt="Brooke's Trusty Paws Co."
             width={40}
             height={40}

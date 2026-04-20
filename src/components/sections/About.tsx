@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Badge from '@/components/ui/Badge'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const FALLBACK_PET = '/images/Walking_Dog_Neutral_Colors_Silhouette.png'
+const FALLBACK_PET = '/images/Walking_Dog_Neutral_Colors_Silhouette.webp'
 
 const badges = [
   { label: '4 Yrs Vet Experience', color: 'ocean' as const },
@@ -26,8 +26,8 @@ function AboutImage({ src, alt, tall = false }: { src: string; alt: string; tall
         src={src}
         alt={alt}
         fill
+        sizes={tall ? '(max-width: 768px) 176px, 208px' : '(max-width: 768px) 144px, 176px'}
         className="object-cover"
-        unoptimized={src.startsWith('http')}
       />
     </div>
   )
