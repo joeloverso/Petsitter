@@ -49,10 +49,11 @@ export default function ServiceAreaEditor({ initialConfig }: { initialConfig: Se
       <div className="space-y-5">
         {/* Home zip */}
         <div>
-          <label className="block text-sm font-semibold text-driftwood mb-1.5">
+          <label htmlFor="home-zip" className="block text-sm font-semibold text-driftwood mb-1.5">
             Home zip code
           </label>
           <input
+            id="home-zip"
             type="text"
             inputMode="numeric"
             maxLength={5}
@@ -66,10 +67,11 @@ export default function ServiceAreaEditor({ initialConfig }: { initialConfig: Se
 
         {/* Radius */}
         <div>
-          <label className="block text-sm font-semibold text-driftwood mb-1.5">
+          <label htmlFor="service-radius" className="block text-sm font-semibold text-driftwood mb-1.5">
             Radius — <span className="text-ocean">{radius} miles</span>
           </label>
           <input
+            id="service-radius"
             type="range"
             min={1}
             max={50}

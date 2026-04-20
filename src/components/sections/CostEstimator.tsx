@@ -78,9 +78,9 @@ export default function CostEstimator() {
         <div className="bg-white rounded-3xl shadow-md border border-sand/50 p-8 space-y-6">
           {/* Service type */}
           <div>
-            <label className="block text-sm font-semibold text-driftwood mb-3">
+            <p className="block text-sm font-semibold text-driftwood mb-3">
               Service Type
-            </label>
+            </p>
             <div className="grid grid-cols-3 gap-3">
               {(['visit', 'overnight', 'walk'] as ServiceType[]).map((type) => (
                 <button
@@ -166,7 +166,7 @@ function NumberInput({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-driftwood mb-2">{label}</label>
+      <p className="block text-sm font-semibold text-driftwood mb-2">{label}</p>
       <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(Math.max(min, value - 1))}

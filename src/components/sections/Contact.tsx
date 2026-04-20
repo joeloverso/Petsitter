@@ -92,6 +92,7 @@ export default function Contact() {
                 name="name"
                 required
                 type="text"
+                autoComplete="name"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full border border-sand rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-ocean transition-colors"
@@ -104,6 +105,7 @@ export default function Contact() {
                 id="contact-email"
                 name="email"
                 type="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full border border-sand rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-ocean transition-colors"
@@ -116,6 +118,7 @@ export default function Contact() {
                 id="contact-phone"
                 name="phone"
                 type="tel"
+                autoComplete="tel"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full border border-sand rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-ocean transition-colors"

@@ -114,8 +114,9 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-xs text-gray-400 font-semibold mb-1">Base Price (Low) $</label>
+              <label htmlFor={`svc-${service.id}-price-low`} className="block text-xs text-gray-400 font-semibold mb-1">Base Price (Low) $</label>
               <input
+                id={`svc-${service.id}-price-low`}
                 type="number"
                 className="w-full border border-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-ocean"
                 value={service.base_price_low}
@@ -123,8 +124,9 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 font-semibold mb-1">Base Price (High) $</label>
+              <label htmlFor={`svc-${service.id}-price-high`} className="block text-xs text-gray-400 font-semibold mb-1">Base Price (High) $</label>
               <input
+                id={`svc-${service.id}-price-high`}
                 type="number"
                 className="w-full border border-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-ocean"
                 value={service.base_price_high}
@@ -134,8 +136,9 @@ export default function ServicesEditor({ initialServices }: { initialServices: S
           </div>
 
           <div className="mb-4">
-            <label className="block text-xs text-gray-400 font-semibold mb-1">Pricing Notes</label>
+            <label htmlFor={`svc-${service.id}-notes`} className="block text-xs text-gray-400 font-semibold mb-1">Pricing Notes</label>
             <textarea
+              id={`svc-${service.id}-notes`}
               rows={3}
               className="w-full border border-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-ocean resize-none"
               value={service.pricing_notes}
