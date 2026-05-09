@@ -27,8 +27,10 @@ export default async function Home() {
     <>
       {/* Preconnect to Supabase storage so the LCP image fetch doesn't pay DNS+TCP+TLS */}
       <link rel="preconnect" href="https://hiwiwxwzdtjesrnvwuwo.supabase.co" />
-      {/* If a custom profile photo is stored in Supabase, preload the optimized version.
-          The static fallback is preloaded unconditionally from layout.tsx. */}
+      {/* Preload the Supabase profile photo at the correct optimized sizes.
+          imageSrcSet covers 1x (384w), retina mobile (640w), and 2x desktop (828w).
+          deviceSizes in next.config.ts is capped at 1920 so the browser can never
+          request w=3840 even if sizes is missing from a stale ISR page. */}
       {profileImageUrl && (
         <link
           rel="preload"

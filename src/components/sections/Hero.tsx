@@ -62,7 +62,7 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
                   alt="Brooke Maisano, Trusty Paws Co."
                   className="object-cover w-full h-full"
                   fetchPriority="high"
-                  decoding="sync"
+                  decoding="async"
                 />
               )}
             </div>

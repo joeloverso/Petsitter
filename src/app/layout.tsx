@@ -102,8 +102,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth">
       <head>
-        {/* Preload the LCP hero image immediately — before any async data fetch runs */}
-        <link rel="preload" as="image" href="/images/Brooke_Profile_Hero.webp" type="image/webp" fetchPriority="high" />
         {/* iOS home screen icon — Safari reads this, not the manifest */}
         <link rel="apple-touch-icon" href="/images/Transparent_Logo_Icons.png" />
         <script
