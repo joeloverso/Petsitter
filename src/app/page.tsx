@@ -11,6 +11,8 @@ import FAQ from '@/components/sections/FAQ'
 import Testimonials from '@/components/sections/Testimonials'
 import Contact from '@/components/sections/Contact'
 
+export const revalidate = 3600
+
 export default async function Home() {
   const supabase = await createClient()
   const { data: images } = await supabase.from('site_images').select('key, url')
@@ -19,11 +21,26 @@ export default async function Home() {
     (images ?? []).map((img: { key: string; url: string }) => [img.key, img.url])
   )
 
+  const profileImageUrl = imageMap['profile'] || ''
+
   return (
     <>
+      {/* Preconnect to Supabase storage so the LCP image fetch doesn't pay DNS+TCP+TLS */}
+      <link rel="preconnect" href="https://hiwiwxwzdtjesrnvwuwo.supabase.co" />
+      {/* Preload the LCP image — either the Supabase-hosted photo or the local fallback */}
+      {profileImageUrl ? (
+        <link
+          rel="preload"
+          as="image"
+          href={`/_next/image?url=${encodeURIComponent(profileImageUrl)}&w=384&q=75`}
+          imageSrcSet={`/_next/image?url=${encodeURIComponent(profileImageUrl)}&w=288&q=75 1x, /_next/image?url=${encodeURIComponent(profileImageUrl)}&w=384&q=75 2x`}
+        />
+      ) : (
+        <link rel="preload" as="image" href="/images/Brooke_Profile_Trimmed.webp" />
+      )}
       <Navbar />
       <main>
-        <Hero profileImageUrl={imageMap['profile'] || ''} />
+        <Hero profileImageUrl={profileImageUrl} />
         <About
           petImageUrls={[imageMap['pet_1'] || '', imageMap['pet_2'] || '']}
           familyImageUrls={[imageMap['family_1'] || '', imageMap['family_2'] || '']}

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const FALLBACK_PROFILE = '/images/Profile_Sihouette.webp'
+const FALLBACK_PROFILE = '/images/Brooke_Profile_Trimmed.webp'
 
 export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
   const imageSrc = profileImageUrl || FALLBACK_PROFILE
