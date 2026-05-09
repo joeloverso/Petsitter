@@ -1,11 +1,7 @@
 import Image from 'next/image'
 import WaveDivider from '@/components/layout/WaveDivider'
 
-const FALLBACK_PROFILE = '/images/Brooke_Profile_Trimmed.webp'
-
 export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
-  const imageSrc = profileImageUrl || FALLBACK_PROFILE
-
   return (
     <section
       id="hero"
@@ -47,15 +43,28 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
           {/* Photo */}
           <div className="flex-shrink-0">
             <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-white shadow-2xl">
-              <Image
-                src={imageSrc}
-                alt="Brooke Maisano, Trusty Paws Co."
-                fill
-                sizes="(max-width: 768px) 288px, 384px"
-                className="object-cover"
-                priority
-                fetchPriority="high"
-              />
+              {profileImageUrl ? (
+                // Custom photo uploaded via admin — use Next.js optimization for the unknown source
+                <Image
+                  src={profileImageUrl}
+                  alt="Brooke Maisano, Trusty Paws Co."
+                  fill
+                  sizes="(max-width: 768px) 288px, 384px"
+                  className="object-cover"
+                  priority
+                  fetchPriority="high"
+                />
+              ) : (
+                // Pre-sized static WebP (768×1043, 64 KB) — served directly from CDN, no optimization step
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src="/images/Brooke_Profile_Hero.webp"
+                  alt="Brooke Maisano, Trusty Paws Co."
+                  className="object-cover w-full h-full"
+                  fetchPriority="high"
+                  decoding="sync"
+                />
+              )}
             </div>
           </div>
         </div>
