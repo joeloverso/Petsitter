@@ -27,16 +27,23 @@ export default async function Home() {
     <>
       {/* Preconnect to Supabase storage so the LCP image fetch doesn't pay DNS+TCP+TLS */}
       <link rel="preconnect" href="https://hiwiwxwzdtjesrnvwuwo.supabase.co" />
-      {/* Preload the LCP image — either the Supabase-hosted photo or the local fallback */}
+      {/* Preload the LCP image — URL must match the /_next/image?url=... that <Image> actually serves */}
       {profileImageUrl ? (
         <link
           rel="preload"
           as="image"
           href={`/_next/image?url=${encodeURIComponent(profileImageUrl)}&w=384&q=75`}
-          imageSrcSet={`/_next/image?url=${encodeURIComponent(profileImageUrl)}&w=288&q=75 1x, /_next/image?url=${encodeURIComponent(profileImageUrl)}&w=384&q=75 2x`}
+          imageSrcSet={`/_next/image?url=${encodeURIComponent(profileImageUrl)}&w=384&q=75 384w, /_next/image?url=${encodeURIComponent(profileImageUrl)}&w=640&q=75 640w`}
+          imageSizes="(max-width: 768px) 288px, 384px"
         />
       ) : (
-        <link rel="preload" as="image" href="/images/Brooke_Profile_Trimmed.webp" />
+        <link
+          rel="preload"
+          as="image"
+          href="/_next/image?url=%2Fimages%2FBrooke_Profile_Trimmed.webp&w=384&q=75"
+          imageSrcSet="/_next/image?url=%2Fimages%2FBrooke_Profile_Trimmed.webp&w=384&q=75 384w, /_next/image?url=%2Fimages%2FBrooke_Profile_Trimmed.webp&w=640&q=75 640w"
+          imageSizes="(max-width: 768px) 288px, 384px"
+        />
       )}
       <Navbar />
       <main>

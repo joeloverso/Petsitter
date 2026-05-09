@@ -54,6 +54,7 @@ export default function Hero({ profileImageUrl }: { profileImageUrl: string }) {
                 sizes="(max-width: 768px) 288px, 384px"
                 className="object-cover"
                 priority
+                fetchPriority="high"
               />
             </div>
           </div>
