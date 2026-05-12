@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import DeleteMessageButton from './DeleteMessageButton'
+import { LuMail, LuMessageCircle } from 'react-icons/lu'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,7 +69,7 @@ export default async function MessageDetail({ params }: { params: Promise<{ id: 
               href={`mailto:${msg.email}?subject=Re: Your Inquiry - Brooke's Trusty Paws Co.`}
               className="flex items-center gap-2 px-5 py-2.5 bg-ocean text-white rounded-full text-sm font-bold hover:bg-deep-ocean transition-colors"
             >
-              ✉️ Reply via Email
+              <LuMail size={16} /> Reply via Email
             </a>
           )}
           {msg.phone && (
@@ -76,7 +77,7 @@ export default async function MessageDetail({ params }: { params: Promise<{ id: 
               href={`sms:${msg.phone}`}
               className="flex items-center gap-2 px-5 py-2.5 bg-coral text-white rounded-full text-sm font-bold hover:bg-light-coral transition-colors"
             >
-              💬 Reply via Text
+              <LuMessageCircle size={16} /> Reply via Text
             </a>
           )}
           {!msg.phone && phoneNumber && (

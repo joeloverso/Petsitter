@@ -4,13 +4,15 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Image from 'next/image'
+import { LuHouse, LuMail, LuCalendar, LuChartBar, LuPencil, LuLogOut } from 'react-icons/lu'
+import type { IconType } from 'react-icons'
 
-const navItems = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: '🏠' },
-  { label: 'Messages', href: '/admin/messages', icon: '✉️' },
-  { label: 'Calendar', href: '/admin/calendar', icon: '📅' },
-  { label: 'Analytics', href: '/admin/analytics', icon: '📊' },
-  { label: 'Edit Content', href: '/admin/content', icon: '✏️' },
+const navItems: { label: string; href: string; Icon: IconType }[] = [
+  { label: 'Dashboard', href: '/admin/dashboard', Icon: LuHouse },
+  { label: 'Messages', href: '/admin/messages', Icon: LuMail },
+  { label: 'Calendar', href: '/admin/calendar', Icon: LuCalendar },
+  { label: 'Analytics', href: '/admin/analytics', Icon: LuChartBar },
+  { label: 'Edit Content', href: '/admin/content', Icon: LuPencil },
 ]
 
 export default function AdminSidebar() {
@@ -51,7 +53,7 @@ export default function AdminSidebar() {
                   : 'text-white/70 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <span className="text-lg shrink-0">{item.icon}</span>
+              <item.Icon size={20} className="shrink-0" />
               <span className="hidden md:block">{item.label}</span>
             </Link>
           )
@@ -64,7 +66,7 @@ export default function AdminSidebar() {
           onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:bg-white/10 hover:text-white transition-colors text-sm font-semibold"
         >
-          <span className="text-lg shrink-0">🚪</span>
+          <LuLogOut size={20} className="shrink-0" />
           <span className="hidden md:block">Sign Out</span>
         </button>
       </div>

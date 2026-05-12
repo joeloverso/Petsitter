@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { LuMessageCircle, LuMail, LuClipboardList, LuCircleCheck } from 'react-icons/lu'
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -55,7 +56,7 @@ export default function Contact() {
               href={`sms:${phoneNumber}`}
               className="flex items-center gap-4 bg-coral text-white rounded-2xl px-6 py-5 font-bold text-lg hover:bg-light-coral transition-colors shadow-md"
             >
-              <span className="text-3xl">💬</span>
+              <LuMessageCircle size={32} className="shrink-0" />
               <div>
                 <p className="text-sm font-semibold opacity-80">Text Me</p>
                 <p className="text-xl">{phoneNumber}</p>
@@ -65,7 +66,7 @@ export default function Contact() {
               href={`mailto:${emailAddress}`}
               className="flex items-center gap-4 bg-ocean text-white rounded-2xl px-6 py-5 font-bold text-lg hover:bg-deep-ocean transition-colors shadow-md"
             >
-              <span className="text-3xl">✉️</span>
+              <LuMail size={32} className="shrink-0" />
               <div>
                 <p className="text-sm font-semibold opacity-80">Email Me</p>
                 <p className="text-xl break-all">{emailAddress}</p>
@@ -73,7 +74,7 @@ export default function Contact() {
             </a>
 
             <div className="bg-sunshine/20 rounded-2xl p-5 border border-sunshine/40">
-              <p className="font-semibold text-driftwood mb-2">📋 Booking Notes</p>
+              <p className="font-semibold text-driftwood mb-2 flex items-center gap-2"><LuClipboardList size={16} /> Booking Notes</p>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Book 1–2 weeks in advance</li>
                 <li>• 2–4 weeks for stays of 1 week+</li>
@@ -169,7 +170,7 @@ export default function Contact() {
 
             {status === 'success' && (
               <p className="text-center text-sm text-deep-ocean font-semibold">
-                ✅ Message sent! Brooke will be in touch soon.
+                <LuCircleCheck size={16} className="inline mr-1 -mt-0.5" /> Message sent! Brooke will be in touch soon.
               </p>
             )}
             {status === 'error' && (

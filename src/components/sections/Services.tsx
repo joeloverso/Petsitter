@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import ServiceCard from '@/components/ui/ServiceCard'
 import WaveDivider from '@/components/layout/WaveDivider'
+import { LuPawPrint, LuMoon, LuDog, LuSparkle } from 'react-icons/lu'
+import type { ReactNode } from 'react'
 
-const ICONS: Record<string, string> = {
-  'Pet Sitting Visit': '🐾',
-  'Overnight Stay': '🌙',
-  'Dog Walking': '🦮',
+const ICONS: Record<string, ReactNode> = {
+  'Pet Sitting Visit': <LuPawPrint size={48} className="text-ocean" />,
+  'Overnight Stay': <LuMoon size={48} className="text-ocean" />,
+  'Dog Walking': <LuDog size={48} className="text-ocean" />,
 }
 
 const fallbackServices = [
@@ -64,7 +66,7 @@ export default async function Services() {
           {services.map((s) => (
             <ServiceCard
               key={s.name}
-              icon={ICONS[s.name] ?? '🐾'}
+              icon={ICONS[s.name] ?? <LuPawPrint size={48} className="text-ocean" />}
               title={s.name}
               description={s.description}
               pricing={s.pricing_notes.split('\n').filter(Boolean)}
@@ -76,7 +78,7 @@ export default async function Services() {
           <p className="font-semibold text-driftwood w-full text-center mb-1">Add-ons</p>
           {addons.map((a) => (
             <div key={a.label} className="flex items-center gap-2 text-sm text-gray-600">
-              <span className="text-coral font-bold text-base">✦</span>
+              <LuSparkle size={14} className="text-coral shrink-0 mt-0.5" />
               <span>
                 <strong>{a.price}</strong>: {a.label}
               </span>

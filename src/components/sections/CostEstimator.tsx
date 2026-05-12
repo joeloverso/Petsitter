@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { LuPawPrint, LuMoon, LuDog } from 'react-icons/lu'
 import WaveDivider from '@/components/layout/WaveDivider'
 
 type ServiceType = 'visit' | 'overnight' | 'walk'
@@ -92,7 +93,13 @@ export default function CostEstimator() {
                       : 'bg-white text-driftwood border-sand hover:border-ocean'
                   }`}
                 >
-                  {type === 'visit' ? '🐾 Visit' : type === 'overnight' ? '🌙 Overnight' : '🦮 Walk'}
+                  {type === 'visit' ? (
+                    <><LuPawPrint size={16} className="inline -mt-0.5 mr-1" />Visit</>
+                  ) : type === 'overnight' ? (
+                    <><LuMoon size={16} className="inline -mt-0.5 mr-1" />Overnight</>
+                  ) : (
+                    <><LuDog size={16} className="inline -mt-0.5 mr-1" />Walk</>
+                  )}
                 </button>
               ))}
             </div>

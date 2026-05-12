@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react'
+
 interface ServiceCardProps {
-  icon: string
+  icon: ReactNode
   title: string
   description: string
   pricing: string[]
@@ -17,7 +19,7 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   return (
     <div className="bg-white rounded-3xl shadow-md p-8 flex flex-col items-center text-center border border-sand/50 hover:shadow-xl transition-shadow duration-300">
-      <div className="text-5xl mb-4">{icon}</div>
+      <div className="mb-4">{icon}</div>
       <h3 className="font-display text-2xl text-deep-ocean mb-3">{title}</h3>
       <p className="text-gray-600 mb-5 leading-relaxed">{description}</p>
       <div className="w-full bg-white-sand rounded-2xl p-4 mb-5">

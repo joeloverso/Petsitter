@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
+import { LuMail, LuCalendar, LuChartBar, LuPencil } from 'react-icons/lu'
+import type { ReactNode } from 'react'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,10 +40,10 @@ export default async function AdminDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <StatCard label="Unread Messages" value={unreadCount ?? 0} icon="✉️" accent="coral" href="/admin/messages" />
-        <StatCard label="View Calendar" value="📅" icon="📅" accent="ocean" href="/admin/calendar" />
-        <StatCard label="Analytics" value="📊" icon="📊" accent="sand" href="/admin/analytics" />
-        <StatCard label="Edit Content" value="✏️" icon="✏️" accent="seafoam" href="/admin/content" />
+        <StatCard label="Unread Messages" value={unreadCount ?? 0} icon={<LuMail size={20} />} accent="coral" href="/admin/messages" />
+        <StatCard label="View Calendar" value="" icon={<LuCalendar size={20} />} accent="ocean" href="/admin/calendar" />
+        <StatCard label="Analytics" value="" icon={<LuChartBar size={20} />} accent="sand" href="/admin/analytics" />
+        <StatCard label="Edit Content" value="" icon={<LuPencil size={20} />} accent="seafoam" href="/admin/content" />
       </div>
 
       {/* Recent messages */}
@@ -91,7 +93,7 @@ function StatCard({
 }: {
   label: string
   value: string | number
-  icon: string
+  icon: ReactNode
   accent: string
   href: string
 }) {
@@ -107,7 +109,7 @@ function StatCard({
       href={href}
       className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-2"
     >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${accentMap[accent]}`}>
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${accentMap[accent]}`}>
         {icon}
       </div>
       <p className="text-2xl font-bold text-driftwood">{typeof value === 'number' ? value : ''}</p>

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
+import { LuPawPrint } from 'react-icons/lu'
 
 interface ImageSlot {
   key: 'profile' | 'pet_1' | 'pet_2' | 'family_1' | 'family_2'
@@ -129,8 +130,8 @@ export default function ImagesEditor({ initialImages }: { initialImages: SiteIma
                     unoptimized
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-4xl text-gray-300">
-                    🐾
+                  <div className="w-full h-full flex items-center justify-center text-gray-300">
+                    <LuPawPrint size={40} />
                   </div>
                 )}
                 {(isUploading || isRemoving) && (
