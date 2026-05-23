@@ -134,7 +134,7 @@ export default function Footer() {
               height={64}
               className="w-[2.625rem] h-[2.625rem] object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
-            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight">
+            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight text-white/90 group-hover:text-white">
               Phrygian Labs
             </span>
           </a>
