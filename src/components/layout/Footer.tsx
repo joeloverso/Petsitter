@@ -128,7 +128,7 @@ export default function Footer() {
           >
             <span className="text-[0.7rem] tracking-wide">Built by</span>
             <Image
-              src="/images/phrygian-labs-medallion.png"
+              src="/images/phrygian-labs-gordian-knot.png"
               alt=""
               width={64}
               height={64}
