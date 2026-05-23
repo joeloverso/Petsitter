@@ -124,7 +124,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Built by Phrygian Labs"
-            className="group inline-flex items-center gap-2 text-white/35 hover:text-white/70 transition-colors"
+            className="group inline-flex items-center gap-2 text-white/35 hover:text-white/70 hover:-translate-y-0.5 transition-all duration-200"
           >
             <span className="text-[0.7rem] tracking-wide">Built by</span>
             <Image
@@ -134,7 +134,7 @@ export default function Footer() {
               height={64}
               className="w-[2.625rem] h-[2.625rem] object-contain opacity-70 group-hover:opacity-100 transition-opacity"
             />
-            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight text-white/90 group-hover:text-white">
+            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight text-white/90 group-hover:text-white transition-all duration-200 group-hover:[text-shadow:0_0_8px_rgba(255,255,255,0.5),0_0_18px_rgba(255,255,255,0.3)]">
               Phrygian Labs
             </span>
           </a>
