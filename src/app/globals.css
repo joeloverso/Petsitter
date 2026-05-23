@@ -43,6 +43,14 @@ body {
   background-color: var(--white-sand);
 }
 
+/* Tailwind v4 Preflight no longer sets cursor:pointer on buttons — restore it. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 /* Scroll-reveal: the from-state (.reveal-init) is added by JS only when motion
    is allowed and supported, so content defaults to fully visible everywhere. */
 .reveal-init {
