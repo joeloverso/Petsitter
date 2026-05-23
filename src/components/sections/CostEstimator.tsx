@@ -82,23 +82,23 @@ export default function CostEstimator() {
             <p className="block text-sm font-semibold text-driftwood mb-3">
               Service Type
             </p>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {(['visit', 'overnight', 'walk'] as ServiceType[]).map((type) => (
                 <button
                   key={type}
                   onClick={() => setServiceType(type)}
-                  className={`py-3 rounded-2xl text-sm font-semibold border-2 transition-all capitalize ${
+                  className={`py-3 px-1 rounded-2xl text-xs sm:text-sm font-semibold border-2 transition-all capitalize whitespace-nowrap ${
                     serviceType === type
                       ? 'bg-ocean text-white border-ocean'
                       : 'bg-white text-driftwood border-sand hover:border-ocean'
                   }`}
                 >
                   {type === 'visit' ? (
-                    <><LuPawPrint size={16} className="inline -mt-0.5 mr-1" />Visit</>
+                    <><LuPawPrint size={14} className="inline -mt-0.5 mr-1" />Visit</>
                   ) : type === 'overnight' ? (
-                    <><LuMoon size={16} className="inline -mt-0.5 mr-1" />Overnight</>
+                    <><LuMoon size={14} className="inline -mt-0.5 mr-1" />Overnight</>
                   ) : (
-                    <><LuDog size={16} className="inline -mt-0.5 mr-1" />Walk</>
+                    <><LuDog size={14} className="inline -mt-0.5 mr-1" />Walk</>
                   )}
                 </button>
               ))}
