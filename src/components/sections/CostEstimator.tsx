@@ -86,7 +86,10 @@ export default function CostEstimator() {
               {(['visit', 'overnight', 'walk'] as ServiceType[]).map((type) => (
                 <button
                   key={type}
-                  onClick={() => setServiceType(type)}
+                  onClick={() => {
+                    setServiceType(type)
+                    if (type === 'walk') setNumCats(0)
+                  }}
                   className={`py-3 px-1 rounded-2xl text-xs sm:text-sm font-semibold border-2 transition-all capitalize whitespace-nowrap ${
                     serviceType === type
                       ? 'bg-ocean text-white border-ocean'
@@ -105,10 +108,12 @@ export default function CostEstimator() {
             </div>
           </div>
 
-          {/* Pet counts */}
-          <div className="grid grid-cols-2 gap-6">
+          {/* Pet counts — cats aren't applicable to dog walking */}
+          <div className={serviceType === 'walk' ? '' : 'grid grid-cols-2 gap-6'}>
             <NumberInput label="Number of Dogs" value={numDogs} min={0} max={10} onChange={setNumDogs} />
-            <NumberInput label="Number of Cats" value={numCats} min={0} max={10} onChange={setNumCats} />
+            {serviceType !== 'walk' && (
+              <NumberInput label="Number of Cats" value={numCats} min={0} max={10} onChange={setNumCats} />
+            )}
           </div>
 
           {/* Days/visits */}
