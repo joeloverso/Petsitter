@@ -115,8 +115,29 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 text-center text-white/40 text-xs">
-          © {new Date().getFullYear()}{' '}Brooke&apos;s Trusty Paws Co. All rights reserved.
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col items-center gap-3 text-center">
+          <p className="text-white/40 text-xs">
+            © {new Date().getFullYear()}{' '}Brooke&apos;s Trusty Paws Co. All rights reserved.
+          </p>
+          <a
+            href="https://phrygianlabs.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Built by Phrygian Labs"
+            className="group inline-flex items-center gap-2 text-white/35 hover:text-white/70 transition-colors"
+          >
+            <span className="text-[0.7rem] tracking-wide">Built by</span>
+            <Image
+              src="/images/phrygian-labs-medallion.png"
+              alt=""
+              width={64}
+              height={64}
+              className="w-[2.625rem] h-[2.625rem] object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+            />
+            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight">
+              Phrygian Labs
+            </span>
+          </a>
         </div>
       </div>
     </footer>
