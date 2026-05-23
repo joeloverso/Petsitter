@@ -64,7 +64,7 @@ export default function CostEstimator() {
   return (
     <section id="estimate" className="bg-white-sand py-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div data-reveal-item className="text-center mb-10">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             Plan Your Budget
           </p>
@@ -76,7 +76,7 @@ export default function CostEstimator() {
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-md border border-sand/50 p-8 space-y-6">
+        <div data-reveal-item className="bg-white rounded-3xl shadow-md border border-sand/50 p-8 space-y-6">
           {/* Service type */}
           <div>
             <p className="block text-sm font-semibold text-driftwood mb-3">

@@ -10,6 +10,7 @@ import AvailabilityCalendar from '@/components/sections/AvailabilityCalendar'
 import FAQ from '@/components/sections/FAQ'
 import Testimonials from '@/components/sections/Testimonials'
 import Contact from '@/components/sections/Contact'
+import Reveal from '@/components/ui/Reveal'
 
 export const revalidate = 3600
 
@@ -42,18 +43,35 @@ export default async function Home() {
       )}
       <Navbar />
       <main>
+        {/* Hero is left unwrapped on purpose: it's above the fold / the LCP element. */}
         <Hero profileImageUrl={profileImageUrl} />
-        <About
-          petImageUrls={[imageMap['pet_1'] || '', imageMap['pet_2'] || '']}
-          familyImageUrls={[imageMap['family_1'] || '', imageMap['family_2'] || '']}
-        />
-        <Services />
-        <CostEstimator />
-        <ServiceArea />
-        <AvailabilityCalendar />
-        <FAQ />
-        <Testimonials />
-        <Contact />
+        <Reveal>
+          <About
+            petImageUrls={[imageMap['pet_1'] || '', imageMap['pet_2'] || '']}
+            familyImageUrls={[imageMap['family_1'] || '', imageMap['family_2'] || '']}
+          />
+        </Reveal>
+        <Reveal>
+          <Services />
+        </Reveal>
+        <Reveal>
+          <CostEstimator />
+        </Reveal>
+        <Reveal>
+          <ServiceArea />
+        </Reveal>
+        <Reveal>
+          <AvailabilityCalendar />
+        </Reveal>
+        <Reveal>
+          <FAQ />
+        </Reveal>
+        <Reveal>
+          <Testimonials />
+        </Reveal>
+        <Reveal>
+          <Contact />
+        </Reveal>
       </main>
       <Footer />
     </>

@@ -52,14 +52,14 @@ export default function About({ petImageUrls, familyImageUrls }: AboutProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center gap-14">
           {/* Photo mosaic */}
-          <div className="flex-shrink-0 flex gap-3 items-end">
+          <div data-reveal-item className="flex-shrink-0 flex gap-3 items-end">
             {photos.map((photo, i) => (
               <AboutImage key={i} src={photo.src} alt={photo.alt} tall={photo.tall} />
             ))}
           </div>
 
           {/* Text */}
-          <div className="flex-1">
+          <div data-reveal-item className="flex-1">
             <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
               About Me
             </p>

@@ -49,7 +49,7 @@ export default async function Services() {
   return (
     <section id="services" className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
+        <div data-reveal-item className="text-center mb-14">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             What I Offer
           </p>
@@ -64,17 +64,18 @@ export default async function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {services.map((s) => (
-            <ServiceCard
-              key={s.name}
-              icon={ICONS[s.name] ?? <LuPawPrint size={48} className="text-ocean" />}
-              title={s.name}
-              description={s.description}
-              pricing={s.pricing_notes.split('\n').filter(Boolean)}
-            />
+            <div key={s.name} data-reveal-item className="h-full [&>*]:h-full">
+              <ServiceCard
+                icon={ICONS[s.name] ?? <LuPawPrint size={48} className="text-ocean" />}
+                title={s.name}
+                description={s.description}
+                pricing={s.pricing_notes.split('\n').filter(Boolean)}
+              />
+            </div>
           ))}
         </div>
 
-        <div className="bg-sunshine/20 rounded-3xl p-6 flex flex-wrap gap-6 justify-center border border-sunshine/40">
+        <div data-reveal-item className="bg-sunshine/20 rounded-3xl p-6 flex flex-wrap gap-6 justify-center border border-sunshine/40">
           <p className="font-semibold text-driftwood w-full text-center mb-1">Add-ons</p>
           {addons.map((a) => (
             <div key={a.label} className="flex items-center gap-2 text-sm text-gray-600">
@@ -86,7 +87,7 @@ export default async function Services() {
           ))}
         </div>
 
-        <p className="text-center text-sm text-gray-400 mt-6">
+        <p data-reveal-item className="text-center text-sm text-gray-400 mt-6">
           Holidays not available: Christmas Eve, Christmas Day, Thanksgiving, Easter, Valentine&apos;s Day
         </p>
       </div>

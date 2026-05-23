@@ -63,7 +63,7 @@ export default async function FAQ() {
   return (
     <section id="faqs" className="bg-white-sand py-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div data-reveal-item className="text-center mb-12">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             Got Questions?
           </p>
@@ -74,7 +74,9 @@ export default async function FAQ() {
 
         <div className="space-y-3">
           {faqs.map((faq) => (
-            <FAQItem key={faq.question} question={faq.question} answer={faq.answer} />
+            <div key={faq.question} data-reveal-item>
+              <FAQItem question={faq.question} answer={faq.answer} />
+            </div>
           ))}
         </div>
       </div>

@@ -17,7 +17,7 @@ export default async function ServiceArea() {
   return (
     <section id="service-area" className="bg-white-sand py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div data-reveal-item className="text-center mb-12">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             Where I Work
           </p>
@@ -35,7 +35,7 @@ export default async function ServiceArea() {
           radiusMiles={config.radius_miles}
         />
 
-        <p className="text-center text-sm text-gray-400 mt-6">
+        <p data-reveal-item className="text-center text-sm text-gray-400 mt-6">
           Outside the area? Reach out. I may still be able to help.
         </p>
       </div>

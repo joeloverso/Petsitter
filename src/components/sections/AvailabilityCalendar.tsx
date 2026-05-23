@@ -5,7 +5,7 @@ export default function AvailabilityCalendar() {
   return (
     <section id="calendar" className="bg-deep-ocean py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <div data-reveal-item className="text-center mb-10">
           <p className="text-white/70 font-semibold tracking-widest text-sm uppercase mb-2">
             Check Before You Book
           </p>
@@ -17,11 +17,11 @@ export default function AvailabilityCalendar() {
           </p>
         </div>
 
-        <div className="bg-white/5 rounded-3xl border border-white/10 p-6 md:p-10">
+        <div data-reveal-item className="bg-white/5 rounded-3xl border border-white/10 p-6 md:p-10">
           <AvailabilityCalendarClient />
         </div>
 
-        <p className="text-center text-white/70 text-sm mt-4">
+        <p data-reveal-item className="text-center text-white/70 text-sm mt-4">
           Showing free/busy only. Contact Brooke to book a specific date.
         </p>
       </div>

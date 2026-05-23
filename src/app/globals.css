@@ -41,3 +41,24 @@ body {
   color: var(--black);
   background-color: var(--white-sand);
 }
+
+/* Scroll-reveal: the from-state (.reveal-init) is added by JS only when motion
+   is allowed and supported, so content defaults to fully visible everywhere. */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

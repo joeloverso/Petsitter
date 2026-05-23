@@ -36,7 +36,7 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-white-sand py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div data-reveal-item className="text-center mb-12">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             Ready to Book?
           </p>
@@ -51,7 +51,7 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Quick contact */}
-          <div className="flex flex-col gap-5 justify-center">
+          <div data-reveal-item className="flex flex-col gap-5 justify-center">
             <a
               href={`sms:${phoneNumber}`}
               className="flex items-center gap-4 bg-coral text-white rounded-2xl px-6 py-5 font-bold text-lg hover:bg-light-coral transition-colors shadow-md"
@@ -85,7 +85,7 @@ export default function Contact() {
           </div>
 
           {/* Contact form */}
-          <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-md p-8 border border-sand/50 flex flex-col gap-4">
+          <form onSubmit={handleSubmit} data-reveal-item className="bg-white rounded-3xl shadow-md p-8 border border-sand/50 flex flex-col gap-4">
             <div>
               <label htmlFor="contact-name" className="block text-sm font-semibold text-driftwood mb-1">Name *</label>
               <input

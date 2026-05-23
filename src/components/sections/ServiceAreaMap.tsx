@@ -149,15 +149,18 @@ export default function ServiceAreaMap({ centerLat, centerLng, radiusMiles }: Pr
 
   return (
     <div className="space-y-5">
-      {/* Map */}
-      <div
-        ref={containerRef}
-        className="w-full h-[400px] rounded-3xl overflow-hidden border border-sand/50 shadow-sm z-0"
-        style={{ position: 'relative' }}
-      />
+      {/* Map — reveal wrapper kept off the Leaflet container itself, so the
+          transform never lands on the element Leaflet manages. */}
+      <div data-reveal-item>
+        <div
+          ref={containerRef}
+          className="w-full h-[400px] rounded-3xl overflow-hidden border border-sand/50 shadow-sm z-0"
+          style={{ position: 'relative' }}
+        />
+      </div>
 
       {/* Zip checker */}
-      <div className="bg-white rounded-3xl border border-sand/50 shadow-sm p-6">
+      <div data-reveal-item className="bg-white rounded-3xl border border-sand/50 shadow-sm p-6">
         <p className="font-semibold text-driftwood mb-3">Check if your zip code is covered</p>
         <div className="flex gap-3 flex-wrap">
           <input

@@ -20,7 +20,7 @@ export default function Testimonials() {
   return (
     <section id="testimonials" className="bg-white py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div data-reveal-item className="text-center mb-12">
           <p className="text-ocean font-semibold tracking-widest text-sm uppercase mb-2">
             Happy Clients
           </p>
@@ -31,7 +31,9 @@ export default function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((t) => (
-            <TestimonialCard key={t.name} {...t} />
+            <div key={t.name} data-reveal-item className="h-full [&>*]:h-full">
+              <TestimonialCard {...t} />
+            </div>
           ))}
         </div>
       </div>
