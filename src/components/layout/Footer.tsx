@@ -128,13 +128,13 @@ export default function Footer() {
           >
             <span className="text-[0.7rem] tracking-wide">Built by</span>
             <Image
-              src="/images/phrygian-labs-gordian-knot.png"
+              src="/images/phrygian-labs-gordian-knot-beach.png"
               alt=""
               width={64}
               height={64}
-              className="w-[2.625rem] h-[2.625rem] object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+              className="w-[2.625rem] h-[2.625rem] object-contain"
             />
-            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight text-white/90 group-hover:text-white transition-all duration-200 group-hover:[text-shadow:0_0_8px_rgba(255,255,255,0.5),0_0_18px_rgba(255,255,255,0.3)]">
+            <span className="font-brand font-semibold text-[1.6875rem] tracking-tight text-white-sand transition-all duration-200 group-hover:[text-shadow:0_0_8px_rgba(255,255,255,0.5),0_0_18px_rgba(255,255,255,0.3)]">
               Phrygian Labs
             </span>
           </a>
