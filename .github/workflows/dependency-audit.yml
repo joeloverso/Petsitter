@@ -1,0 +1,96 @@
+name: Dependency audit
+
+# Audit this site's dependency tree for known CVEs.
+#
+# WHY THIS EXISTS
+#
+# On 2026-08-04 this repository was found carrying 15 HIGH advisories, three of
+# them middleware bypasses — "unauthorized access to protected content via
+# middleware bypass", "authentication bypass leading to unauthorized access" —
+# against the src/proxy.ts that gates /admin. They had been published for some
+# time. Nothing here had ever looked, because there was nothing here to look.
+#
+# They were found by a vulnerability scan run across a whole workstation from an
+# unrelated project. That is luck, not a control. This is the control.
+#
+# WHY TWO SCANNERS
+#
+# Because neither is a superset of the other, demonstrated on this very fix:
+# npm audit reported clean on next, postcss and sharp while catching other
+# packages; trivy caught those three. Running only one would have left real
+# advisories unreported whichever one was chosen. The job is green only when
+# both are.
+#
+# Triggers: every PR and push to master, weekly (an advisory published after a
+# version landed is exactly how this repository got into trouble), and manual.
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  schedule:
+    - cron: "0 6 * * 1"   # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: npm audit + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Active LTS, supported to 2028-04-30. Not 20: it reached end of life
+          # on 2026-04-30, and a runtime that no longer receives fixes makes a
+          # clean vulnerability scan a statement about the past.
+          node-version: "24"
+          cache: npm
+
+      # `npm ci` installs exactly what the lockfile pins, which is what Vercel
+      # deploys. `npm install` would re-resolve and could audit a tree this site
+      # does not actually ship.
+      - name: Install from the lockfile
+        run: npm ci
+
+      - name: Audit (high and critical)
+        # Low and moderate still print for review; only high+ fails.
+        run: npm audit --audit-level=high
+
+      # The build is the functional gate. It matters more here than in a typical
+      # site: src/proxy.ts is the authentication boundary for /admin, and a
+      # dependency bump that silently stopped emitting it would be worse than
+      # the advisory it was meant to fix.
+      - name: Build
+        run: npm run build
+
+      - name: Confirm the auth boundary still compiles
+        run: |
+          test -f .next/server/middleware.js \
+            || { echo "proxy.ts produced no middleware bundle — /admin would be ungated"; exit 1; }
+          echo "auth boundary present in the build output"
+
+  trivy:
+    name: trivy (lockfile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan the lockfile for CVEs
+        # Pinned to the commit v0.36.0 resolves to, rather than the tag: a
+        # third-party action is remote code running against this repository,
+        # and a mutable tag can be repointed after it was reviewed.
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: fs
+          scan-ref: package-lock.json
+          format: table
+          # Unfixed findings do not fail: an advisory with no available patch is
+          # not actionable, and failing on it trains everyone to ignore the job.
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+          exit-code: "1"
