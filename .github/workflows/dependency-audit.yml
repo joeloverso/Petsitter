@@ -66,6 +66,16 @@ jobs:
       # dependency bump that silently stopped emitting it would be worse than
       # the advisory it was meant to fix.
       - name: Build
+        # Placeholder Supabase values, not secrets. The /admin route is
+        # prerendered, and @supabase/ssr throws at client construction if the
+        # URL and key are absent, so the build needs *something* parseable —
+        # it never connects. Real credentials are deliberately not wired in:
+        # an audit job has no business holding production keys, and giving it
+        # any would make this workflow a more valuable target than the thing
+        # it audits.
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-not-a-real-key
         run: npm run build
 
       - name: Confirm the auth boundary still compiles
